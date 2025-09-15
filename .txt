@@ -1,0 +1,179 @@
+transitlk/
+├── app/
+│   ├── api/
+│   │   ├── auth/
+│   │   │   └── [...nextauth]/
+│   │   │       └── route.ts                # NextAuth API route
+│   │   ├── bookings/
+│   │   │   ├── route.ts                    # CRUD for bookings
+│   │   │   └── [id]/
+│   │   │       └── route.ts                # Individual booking operations
+│   │   ├── users/
+│   │   │   ├── route.ts                    # User management API
+│   │   │   └── [id]/
+│   │   │       └── route.ts                # User profile operations
+│   │   ├── operators/
+│   │   │   └── route.ts                    # Operator management
+│   │   ├── routes/
+│   │   │   └── route.ts                    # Bus routes management
+│   │   ├── payments/
+│   │   │   ├── route.ts                    # Payment processing
+│   │   │   └── webhook/
+│   │   │       └── route.ts                # Stripe webhook handler
+│   │   ├── tracking/
+│   │   │   └── route.ts                    # Real-time GPS tracking
+│   │   ├── notifications/
+│   │   │   └── route.ts                    # Notification system
+│   │   └── feedback/
+│   │       └── route.ts                    # Feedback and ratings
+│   ├── auth/
+│   │   ├── signin/
+│   │   │   ├── page.tsx                    # Sign in page (CLIENT)
+│   │   │   └── loading.tsx                 # Loading component
+│   │   ├── signup/
+│   │   │   ├── page.tsx                    # Sign up page (CLIENT)
+│   │   │   └── loading.tsx
+│   │   └── reset-password/
+│   │       └── page.tsx                    # Password reset (CLIENT)
+│   ├── dashboard/
+│   │   ├── layout.tsx                      # Dashboard layout (SERVER)
+│   │   ├── page.tsx                        # Dashboard home (SERVER)
+│   │   ├── loading.tsx                     # Dashboard loading UI
+│   │   ├── bookings/
+│   │   │   ├── page.tsx                    # User bookings (SERVER)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx                # Individual booking details
+│   │   ├── tracking/
+│   │   │   └── page.tsx                    # Bus tracking page (CLIENT)
+│   │   └── profile/
+│   │       └── page.tsx                    # User profile (CLIENT)
+│   ├── admin/
+│   │   ├── layout.tsx                      # Admin layout with auth check (SERVER)
+│   │   ├── page.tsx                        # Admin dashboard (SERVER)
+│   │   ├── users/
+│   │   │   ├── page.tsx                    # User management (SERVER)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx                # User details/edit
+│   │   ├── operators/
+│   │   │   ├── page.tsx                    # Operator management (SERVER)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx
+│   │   └── routes/
+│   │       ├── page.tsx                    # Route management (SERVER)
+│   │       └── [id]/
+│   │           └── page.tsx
+│   ├── operator/
+│   │   ├── layout.tsx                      # Operator layout (SERVER)
+│   │   ├── page.tsx                        # Operator dashboard (SERVER)
+│   │   ├── fleet/
+│   │   │   ├── page.tsx                    # Fleet management (SERVER)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx
+│   │   └── schedules/
+│   │       ├── page.tsx                    # Schedule management (SERVER)
+│   │       └── [id]/
+│   │           └── page.tsx
+│   ├── layout.tsx                          # Root layout (SERVER)
+│   ├── page.tsx                            # Landing page (SERVER)
+│   ├── loading.tsx                         # Global loading UI
+│   ├── error.tsx                           # Global error boundary
+│   └── not-found.tsx                       # 404 page
+├── components/
+│   ├── providers/
+│   │   ├── AuthProvider.tsx               # NextAuth session provider (CLIENT)
+│   │   └── NotificationProvider.tsx       # Notification context (CLIENT)
+│   ├── layout/
+│   │   ├── Header.tsx                      # Main navigation (SERVER/CLIENT)
+│   │   ├── Sidebar.tsx                     # Dashboard sidebar (CLIENT)
+│   │   └── Footer.tsx                      # Footer component (SERVER)
+│   ├── auth/
+│   │   ├── LoginForm.tsx                   # Login form with validation (CLIENT)
+│   │   ├── RegisterForm.tsx                # Register form (CLIENT)
+│   │   └── AuthGuard.tsx                   # Route protection wrapper (CLIENT)
+│   ├── dashboard/
+│   │   ├── BookingList.tsx                 # List of user bookings (SERVER)
+│   │   ├── BookingCard.tsx                 # Individual booking card (CLIENT)
+│   │   ├── TrackingMap.tsx                 # Real-time bus map (CLIENT)
+│   │   ├── ProfileCard.tsx                 # User profile display (SERVER)
+│   │   └── StatsCard.tsx                   # Dashboard statistics (SERVER)
+│   ├── admin/
+│   │   ├── UserTable.tsx                   # User management table (CLIENT)
+│   │   ├── OperatorTable.tsx               # Operator management (CLIENT)
+│   │   ├── RouteTable.tsx                  # Route management (CLIENT)
+│   │   └── AdminStats.tsx                  # Admin dashboard stats (SERVER)
+│   ├── operator/
+│   │   ├── FleetManager.tsx                # Fleet management UI (CLIENT)
+│   │   ├── ScheduleManager.tsx             # Schedule management (CLIENT)
+│   │   ├── BusCard.tsx                     # Individual bus display (CLIENT)
+│   │   └── OperatorStats.tsx               # Operator dashboard stats (SERVER)
+│   ├── forms/
+│   │   ├── BookingForm.tsx                 # Ticket booking form (CLIENT)
+│   │   ├── UserForm.tsx                    # User create/edit form (CLIENT)
+│   │   ├── OperatorForm.tsx                # Operator form (CLIENT)
+│   │   ├── RouteForm.tsx                   # Route create/edit form (CLIENT)
+│   │   └── PaymentForm.tsx                 # Payment processing form (CLIENT)
+│   ├── tracking/
+│   │   ├── LiveMap.tsx                     # Interactive bus map (CLIENT)
+│   │   ├── BusMarker.tsx                   # Bus position marker (CLIENT)
+│   │   ├── RouteOverlay.tsx                # Route path on map (CLIENT)
+│   │   └── TrackingList.tsx                # List of tracked buses (CLIENT)
+│   ├── notifications/
+│   │   ├── NotificationList.tsx            # Notification inbox (CLIENT)
+│   │   ├── NotificationItem.tsx            # Individual notification (CLIENT)
+│   │   └── NotificationBell.tsx            # Notification icon with count (CLIENT)
+│   ├── feedback/
+│   │   ├── FeedbackForm.tsx                # Rating and feedback form (CLIENT)
+│   │   ├── FeedbackList.tsx                # List of feedback (SERVER)
+│   │   ├── RatingStars.tsx                 # Star rating component (CLIENT)
+│   │   └── FeedbackCard.tsx                # Individual feedback display (CLIENT)
+│   └── ui/                                 # shadcn/ui components
+│       ├── button.tsx                      # Button component
+│       ├── input.tsx                       # Input component
+│       ├── card.tsx                        # Card component
+│       ├── table.tsx                       # Table component
+│       ├── modal.tsx                       # Modal/Dialog component
+│       ├── toast.tsx                       # Toast notification
+│       ├── badge.tsx                       # Badge component
+│       ├── alert.tsx                       # Alert component
+│       └── form.tsx                        # Form components
+├── lib/
+│   ├── prisma.ts                           # Prisma client singleton
+│   ├── auth.ts                             # NextAuth configuration
+│   ├── validations.ts                      # Zod validation schemas
+│   ├── utils.ts                            # General utility functions
+│   ├── stripe.ts                           # Stripe payment utilities
+│   ├── email.ts                            # Email sending utilities
+│   ├── sms.ts                              # SMS notification utilities
+│   └── constants.ts                        # App-wide constants
+├── hooks/
+│   ├── useAuth.ts                          # Authentication hook
+│   ├── useBookings.ts                      # Booking data fetching
+│   ├── useNotifications.ts                 # Notification management
+│   ├── useTracking.ts                      # Real-time tracking data
+│   ├── usePayments.ts                      # Payment processing hook
+│   └── useLocalStorage.ts                  # Local storage utilities
+├── types/
+│   ├── index.ts                            # Global type definitions
+│   ├── auth.ts                             # Authentication types
+│   ├── booking.ts                          # Booking-related types
+│   ├── tracking.ts                         # GPS and tracking types
+│   └── api.ts                              # API request/response types
+├── prisma/
+│   ├── schema.prisma                       # Database schema
+│   ├── seed.ts                             # Database seeding script
+│   └── migrations/                         # Database migrations (auto-generated)
+├── middleware.ts                           # Next.js middleware for auth
+├── public/
+│   ├── favicon.ico
+│   ├── logo.png
+│   ├── robots.txt
+│   └── sitemap.xml
+├── styles/
+│   └── globals.css                         # Global styles + Tailwind imports
+├── .env.local                              # Environment variables
+├── .env.example                            # Example environment file
+├── next.config.js                          # Next.js configuration
+├── tailwind.config.js                      # Tailwind CSS configuration
+├── tsconfig.json                           # TypeScript configuration
+├── package.json                            # Dependencies and scripts
+└── README.md                               # Project documentation
