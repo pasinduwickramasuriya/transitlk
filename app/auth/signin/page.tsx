@@ -775,7 +775,7 @@ export default function SignInPage() {
                 </div>
 
                 {/* Demo Credentials */}
-                <div className="mt-8 bg-white/20 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
+                {/* <div className="mt-8 bg-white/20 backdrop-blur-sm p-5 rounded-2xl border border-white/20">
                   <div className="flex items-center mb-4">
                     <Sparkles className="h-5 w-5 text-cyan-700 mr-2" />
                     <p className="text-sm font-bold text-gray-800">Demo Credentials</p>
@@ -794,7 +794,7 @@ export default function SignInPage() {
                       <span className="font-medium">user@transitlk.com / user123</span>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
