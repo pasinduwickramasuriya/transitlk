@@ -21,7 +21,8 @@ import {
     Clock,
     AlertTriangle,
     UserCheck,
-    Map
+    Map,
+    DollarSign
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -45,7 +46,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             title: 'Fleet Management',
             href: '/operator/buses',
             icon: Bus,
-            badge: '12 Active',
+            badge: 'Active',
         },
         {
             title: 'Routes & Schedules',
@@ -60,9 +61,15 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             badge: 'Live',
         },
         {
-            title: 'Drivers',
-            href: '/operator/drivers',
-            icon: UserCheck,
+            title: 'Fare',
+            href: '/operator/fare ',
+            icon: DollarSign,
+            badge: null,
+        },
+         {
+            title: 'Notifications',
+            href: '/operator/notifications ',
+            icon: AlertTriangle,
             badge: null,
         },
         {
@@ -77,12 +84,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             icon: Users,
             badge: null,
         },
-        {
-            title: 'Stops',
-            href: '/operator/stops',
-            icon: MapPin,
-            badge: null,
-        }
+        
     ]
 
     const secondaryItems = [
@@ -113,12 +115,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             icon: Settings,
             badge: null,
         },
-        {
-            title: 'Help & Support',
-            href: '/operator/help',
-            icon: HelpCircle,
-            badge: null,
-        }
+        
     ]
 
     const isActive = (href: string) => {
