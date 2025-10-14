@@ -150,7 +150,7 @@
 //       }
 
 //       const result = await response.json()
-      
+
 //       setNotifications([result.notification, ...notifications])
 //       toast.success('Notification sent successfully')
 //       setIsFormOpen(false)
@@ -675,10 +675,10 @@ const notificationTypes = [
   { value: 'EMERGENCY', label: 'Emergency', color: 'bg-red-100 text-red-700', icon: AlertTriangle }
 ] as const
 
-export function NotificationManagementClient({ 
-  operator, 
-  initialNotifications, 
-  users 
+export function NotificationManagementClient({
+  operator,
+  initialNotifications,
+  users
 }: NotificationManagementClientProps) {
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications)
   const [loading, setLoading] = useState(false)
@@ -715,7 +715,7 @@ export function NotificationManagementClient({
 
   const filteredNotifications = useMemo(() => {
     return notifications.filter(notification => {
-      const matchesSearch = !searchTerm || 
+      const matchesSearch = !searchTerm ||
         notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
         notification.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -761,7 +761,7 @@ export function NotificationManagementClient({
       }
 
       const result = await response.json()
-      
+
       setNotifications([result.notification, ...notifications])
       toast.success('Notification sent successfully')
       setIsFormOpen(false)
@@ -804,8 +804,8 @@ export function NotificationManagementClient({
       }
 
       const result = await response.json()
-      
-      setNotifications(notifications.map(n => 
+
+      setNotifications(notifications.map(n =>
         n.id === editingNotification.id ? result.notification : n
       ))
       toast.success('Notification updated successfully')
@@ -831,7 +831,7 @@ export function NotificationManagementClient({
         throw new Error('Failed to update status')
       }
 
-      setNotifications(notifications.map(n => 
+      setNotifications(notifications.map(n =>
         n.id === notificationId ? { ...n, isRead: !currentStatus } : n
       ))
       toast.success(`Notification marked as ${!currentStatus ? 'read' : 'unread'}`)
@@ -992,7 +992,7 @@ export function NotificationManagementClient({
                         <Label>Title</Label>
                         <Input
                           value={formData.title}
-                          onChange={(e) => setFormData({...formData, title: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                           placeholder="Notification title"
                           required
                         />
@@ -1002,7 +1002,7 @@ export function NotificationManagementClient({
                         <Label>Message</Label>
                         <Textarea
                           value={formData.message}
-                          onChange={(e) => setFormData({...formData, message: e.target.value})}
+                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                           placeholder="Notification message"
                           rows={4}
                           required
@@ -1013,7 +1013,7 @@ export function NotificationManagementClient({
                         <Label>Type</Label>
                         <Select
                           value={formData.type}
-                          onValueChange={(value: any) => setFormData({...formData, type: value})}
+                          onValueChange={(value: any) => setFormData({ ...formData, type: value })}
                         >
                           <SelectTrigger>
                             <SelectValue />
@@ -1037,7 +1037,7 @@ export function NotificationManagementClient({
                           id="isBroadcast"
                           checked={formData.isBroadcast}
                           onChange={(e) => setFormData({
-                            ...formData, 
+                            ...formData,
                             isBroadcast: e.target.checked,
                             userId: e.target.checked ? null : formData.userId
                           })}
@@ -1050,7 +1050,7 @@ export function NotificationManagementClient({
                           <Label>Select User</Label>
                           <Select
                             value={formData.userId || ''}
-                            onValueChange={(value) => setFormData({...formData, userId: value})}
+                            onValueChange={(value) => setFormData({ ...formData, userId: value })}
                             required={!formData.isBroadcast}
                           >
                             <SelectTrigger>
@@ -1173,7 +1173,7 @@ export function NotificationManagementClient({
                                   Individual
                                 </Badge>
                               )}
-                              <Badge 
+                              <Badge
                                 variant={notification.isRead ? "secondary" : "default"}
                                 className={cn(
                                   "cursor-pointer",

@@ -1,113 +1,93 @@
+
+
+
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
-    if (!session?.user?.email) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
-    })
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
-    }
-
+    const session = await getServerSession(authOptions)
     const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
+    const userId = searchParams.get('userId')
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
-    const search = searchParams.get('search')
+    const skip = (page - 1) * limit
 
-    let whereClause: any = { userId: user.id }
-
-    if (status && status !== 'all') {
-      whereClause.status = status.toUpperCase()
+    const whereClause: any = {}
+    
+    // If userId is provided, filter by user
+    if (userId) {
+      whereClause.userId = userId
     }
-
-    if (search) {
-      whereClause.OR = [
-        {
-          schedule: {
-            route: {
-              OR: [
-                { startLocation: { contains: search, mode: 'insensitive' } },
-                { endLocation: { contains: search, mode: 'insensitive' } }
-              ]
-            }
-          }
-        },
-        {
-          schedule: {
-            bus: {
-              busNumber: { contains: search, mode: 'insensitive' }
-            }
-          }
-        }
-      ]
+    
+    // If user is not admin, only show their bookings
+    if (session?.user?.role !== 'ADMIN' && session?.user?.id) {
+      whereClause.userId = session.user.id
     }
 
     const [bookings, total] = await Promise.all([
       prisma.booking.findMany({
+        skip,
+        take: limit,
         where: whereClause,
         include: {
           schedule: {
             include: {
+              bus: true,
               route: {
                 include: {
                   operator: true
                 }
-              },
-              bus: true
+              }
             }
           },
+          ticket: true,
           payment: true,
-          ticket: true
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
         },
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit
+        orderBy: {
+          createdAt: 'desc'
+        }
       }),
-      prisma.booking.count({ where: whereClause })
+      prisma.booking.count({
+        where: whereClause
+      })
     ])
 
-    const formattedBookings = bookings.map(booking => ({
-      id: booking.id,
-      bookingRef: `TLK-${booking.id.slice(-6).toUpperCase()}`,
-      route: `${booking.schedule.route.startLocation} → ${booking.schedule.route.endLocation}`,
-      origin: booking.schedule.route.startLocation,
-      destination: booking.schedule.route.endLocation,
-      date: booking.journeyDate.toISOString().split('T')[0],
-      time: booking.schedule.departureTime,
-      busNumber: booking.schedule.bus.busNumber,
-      seats: booking.seatNumber ? [booking.seatNumber.toString()] : [],
-      status: booking.status.toLowerCase(),
-      amount: booking.totalAmount,
-      paymentMethod: booking.payment?.method || 'Unknown',
-      createdAt: booking.createdAt.toISOString()
-    }))
-
     return NextResponse.json({
-      bookings: formattedBookings,
+      success: true,
+      bookings,
       pagination: {
+        page,
+        limit,
         total,
-        pages: Math.ceil(total / limit),
-        currentPage: page,
-        hasNext: page * limit < total,
-        hasPrev: page > 1
+        totalPages: Math.ceil(total / limit)
       }
     })
 
   } catch (error) {
-    console.error('Bookings error:', error)
+    console.error('Bookings fetch error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { success: false, error: 'Failed to fetch bookings' },
       { status: 500 }
     )
   }
 }
+
+
+
+
+
+
+
+
+
+

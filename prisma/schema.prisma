@@ -191,7 +191,7 @@ model Booking {
   userId         String        @db.ObjectId
   scheduleId     String        @db.ObjectId
   busId          String        @db.ObjectId
-  seatNumber     Int?
+  seatNumbers    String        // Changed from seatNumber (Int) to seatNumbers (String)
   passengerName  String
   passengerPhone String
   bookingDate    DateTime      @default(now())
@@ -210,6 +210,7 @@ model Booking {
 
   @@map("bookings")
 }
+
 
 model Ticket {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId

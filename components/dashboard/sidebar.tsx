@@ -1,6 +1,8 @@
+
+
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -10,10 +12,7 @@ import {
   Calendar, 
   MapPin, 
   User, 
-  Menu,
-  X,
-  Bus,
-  LogOut
+  LogOut 
 } from 'lucide-react'
 
 const navigation = [
@@ -26,70 +25,89 @@ const navigation = [
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const sidebarRef = useRef<HTMLDivElement>(null)
+
+  // Close sidebar on outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
 
   return (
     <>
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
+      {/* Profile icon button */}
+      <div className="fixed top-4 left-4 z-50">
         <Button
-          variant="outline"
-          size="sm"
+          variant="ghost"
+          size="icon"
+          className="rounded-full border border-gray-200 shadow hover:shadow-lg focus:ring-2 focus:ring-rose-400 transition"
+          aria-label="Open profile menu"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          <User className="w-6 h-6 text-rose-600" />
         </Button>
       </div>
 
-      {/* Sidebar */}
-      <div className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-white border-r transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <div className="flex flex-col h-full">
-          {/* Logo */}
-          <div className="flex items-center px-6 py-4 border-b">
-            <Bus className="w-8 h-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold">TransitLK</span>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                    isActive
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  <item.icon className="w-5 h-5 mr-3" />
-                  {item.name}
-                </Link>
-              )
-            })}
-          </nav>
-
-          {/* Logout */}
-          <div className="p-4 border-t">
-            <Button variant="ghost" className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50">
+      {/* Sidebar modal drawer */}
+      <div 
+        ref={sidebarRef}
+        className={cn(
+          "fixed top-14 left-4 w-64 bg-white/90 backdrop-blur-lg rounded-xl shadow-lg border border-rose-200 z-40 transition-transform duration-300",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        <nav className="flex flex-col py-6 space-y-1">
+          {navigation.map(({ name, href, icon }) => {
+            const active = pathname === href
+            return (
+              <Link 
+                key={name} 
+                href={href}
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  "flex items-center px-5 py-3 rounded-lg space-x-3 transition-colors font-semibold text-sm",
+                  active 
+                    ? "bg-gradient-to-r from-rose-100 to-violet-100 text-rose-700 shadow-md" 
+                    : "hover:bg-rose-50 hover:text-rose-600 text-gray-600"
+                )}
+              >
+                {/* {icon({ className: `w-5 h-5 ${active ? 'text-rose-600' : 'text-gray-400'}` })} */}
+                
+                <span>{name}</span>
+              </Link>
+            )
+          })}
+          <div className="mt-4 border-t border-rose-200 pt-4 px-5">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 font-semibold"
+              onClick={() => {
+                setIsOpen(false)
+                // Add logout logic here if any
+              }}
+            >
               <LogOut className="w-5 h-5 mr-3" />
               Logout
             </Button>
           </div>
-        </div>
+        </nav>
       </div>
-
-      {/* Overlay */}
+      
+      {/* Background overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-25 z-30"
           onClick={() => setIsOpen(false)}
+          aria-hidden="true"
         />
       )}
     </>

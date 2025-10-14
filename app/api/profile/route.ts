@@ -1,12 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { getServerSession } from 'next-auth'
-import bcrypt from 'bcryptjs'
 
+
+
+
+
+
+
+
+
+
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
+
+// GET user profile
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession(authOptions)
+
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -18,11 +29,18 @@ export async function GET(request: NextRequest) {
         name: true,
         email: true,
         phoneNumber: true,
-        emailVerified: true,
         image: true,
+        emailVerified: true,
+        role: true,
         isActive: true,
         createdAt: true,
-        role: true
+        _count: {
+          select: {
+            bookings: true,
+            notifications: true,
+            feedback: true
+          }
+        }
       }
     })
 
@@ -30,82 +48,46 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Format user data for frontend
-    const profileData = {
-      id: user.id,
-      firstName: user.name?.split(' ')[0] || '',
-      lastName: user.name?.split(' ').slice(1).join(' ') || '',
-      email: user.email,
-      phone: user.phoneNumber || '',
-      dateOfBirth: '', // Add this field to your User model if needed
-      gender: '', // Add this field to your User model if needed
-      address: '', // Add this field to your User model if needed
-      city: '', // Add this field to your User model if needed
-      profileImage: user.image,
-      emailVerified: !!user.emailVerified,
-      phoneVerified: !!user.phoneNumber, // Assuming if phone exists, it's verified
-      memberSince: user.createdAt.toISOString().split('T')[0],
-      role: user.role
-    }
-
-    return NextResponse.json(profileData)
-
+    return NextResponse.json({ user })
   } catch (error) {
-    console.error('Profile fetch error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('Error fetching profile:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
+// PUT update user profile
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession()
-    
+    const session = await getServerSession(authOptions)
+
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const body = await request.json()
-    const { firstName, lastName, phoneNumber, dateOfBirth, gender, address, city } = body
-
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
-    })
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
-    }
+    const { name, phoneNumber, image } = body
 
     const updatedUser = await prisma.user.update({
-      where: { id: user.id },
+      where: { email: session.user.email },
       data: {
-        name: `${firstName} ${lastName}`.trim(),
-        phoneNumber: phoneNumber || null,
-        // Add other fields to your User model if needed
+        name,
+        phoneNumber,
+        image
       },
       select: {
         id: true,
         name: true,
         email: true,
         phoneNumber: true,
-        emailVerified: true,
         image: true,
+        emailVerified: true,
         updatedAt: true
       }
     })
 
-    return NextResponse.json({
-      message: 'Profile updated successfully',
-      user: updatedUser
-    })
-
+    return NextResponse.json({ user: updatedUser, message: 'Profile updated successfully' })
   } catch (error) {
-    console.error('Profile update error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('Error updating profile:', error)
+    return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })
   }
 }
