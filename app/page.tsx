@@ -522,6 +522,7 @@ import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
 import { BenefitsSection } from '@/components/landing/BenefitsSection'
 import { CTASection } from '@/components/landing/CTASection'
 import { Footer } from '@/components/landing/Footer'
+import BusAssistant from '@/components/BusAssistant'
 
 export default function HomePage() {
   return (
@@ -533,6 +534,7 @@ export default function HomePage() {
       <BenefitsSection />
       <CTASection />
       <Footer />
+      <BusAssistant/>
     </div>
   )
 }
