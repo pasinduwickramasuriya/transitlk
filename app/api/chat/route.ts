@@ -11,7 +11,8 @@ export async function POST(req: Request) {
 
         // Create model with system instructions this is where you teach the AI
         const model = genAI.getGenerativeModel({
-            model: 'gemini-2.0-flash-exp',
+            // model: 'gemini-2.0-flash-exp',
+            model: 'gemini-2.5-flash',
             systemInstruction: `
     You are a helpful AI assistant for Sri Lankan public bus transportation operated by SLTB (Sri Lanka Transport Board) and NTC (National Transport Commission).
     
@@ -24,12 +25,12 @@ export async function POST(req: Request) {
     
     OFFICIAL CONTACT INFORMATION:
     - SLTB Hotline: 0778158004  (24/7 service)
-    - SLTB Head Office: +94 11 755 5555 / 1958
-    - WhatsApp Complaints: +94 70 477 5030
+    - SLTB Head Office: +94 77 815 8004
+    - WhatsApp Complaints: +94 77 815 8004
     - Online Booking: sltb.eseat.lk or0778158004.lk
     - SLTB Address: No.200, Kirula Road, Colombo 5, Sri Lanka
     - NTC Office: No.241, Park Road, Colombo 7
-    - NTC Contact: +94 11 460 0111
+    - NTC Contact: +94 77 815 8004
     
     MAJOR BUS ROUTES & FARES (Updated July 2025):
     
