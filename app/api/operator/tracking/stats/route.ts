@@ -73,6 +73,7 @@ export async function GET() {
     console.log('✅ Statistics calculated:', stats)
     return NextResponse.json(stats)
     
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error('❌ Error fetching statistics:', error)
     return NextResponse.json(

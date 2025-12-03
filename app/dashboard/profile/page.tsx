@@ -12,9 +12,13 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { User, Bell, Shield, CreditCard, Save, Loader2, Mail, Phone, Calendar, MapPin, Award, Activity, Ticket, Download, QrCode, Armchair } from 'lucide-react'
+import {
+  User, Bell, Shield, CreditCard, Save, Loader2, Mail, Phone, Calendar, MapPin, Award,
+  Activity, Ticket, Download, QrCode, Armchair, AlertTriangle, Radio, Clock
+} from 'lucide-react'
 import { toast } from 'sonner'
 
+// ========== INTERFACES ==========
 interface UserProfile {
   id: string
   name: string | null
@@ -72,6 +76,17 @@ interface BookingDetails {
   } | null
 }
 
+interface Notification {
+  id: string
+  title: string
+  message: string
+  type: string
+  isRead: boolean
+  createdAt: Date
+  isBroadcast: boolean
+}
+
+// ========== HELPER FUNCTIONS ==========
 const formatDisplay = (dateStr: string | Date) => {
   try {
     return new Date(dateStr).toLocaleDateString('en-US', {
@@ -84,20 +99,40 @@ const formatDisplay = (dateStr: string | Date) => {
   }
 }
 
+const formatTimeAgo = (date: Date | string) => {
+  const now = new Date()
+  const past = new Date(date)
+  const diffMs = now.getTime() - past.getTime()
+  const diffMins = Math.floor(diffMs / 60000)
+  const diffHours = Math.floor(diffMins / 60)
+  const diffDays = Math.floor(diffHours / 24)
+
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins}m ago`
+  if (diffHours < 24) return `${diffHours}h ago`
+  if (diffDays < 7) return `${diffDays}d ago`
+  return formatDisplay(date)
+}
+
+// ========== MAIN COMPONENT ==========
 export default function ProfilePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+
+  // State
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [bookings, setBookings] = useState<Booking[]>([])
+  const [notifications, setNotifications] = useState<Notification[]>([])
   const [selectedBooking, setSelectedBooking] = useState<BookingDetails | null>(null)
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
   const [loadingDetails, setLoadingDetails] = useState(false)
-
+  const [loadingNotifications, setLoadingNotifications] = useState(false)
   const [formData, setFormData] = useState({ name: '', phoneNumber: '', image: '' })
 
+  // ========== API CALLS ==========
   useEffect(() => {
     if (status === 'loading') return
     if (status === 'unauthenticated') {
@@ -107,6 +142,7 @@ export default function ProfilePage() {
     if (status === 'authenticated') {
       fetchProfile()
       fetchBookings()
+      fetchNotifications()
     }
   }, [status, router])
 
@@ -136,6 +172,21 @@ export default function ProfilePage() {
       setBookings(data.bookings)
     } catch (error) {
       console.error('Failed to load bookings:', error)
+    }
+  }
+
+  const fetchNotifications = async () => {
+    setLoadingNotifications(true)
+    try {
+      const response = await fetch('/api/profile/notifications')
+      if (!response.ok) throw new Error('Failed to fetch notifications')
+      const data = await response.json()
+      setNotifications(data.notifications)
+    } catch (error) {
+      console.error('Failed to load notifications:', error)
+      toast.error('Failed to load notifications')
+    } finally {
+      setLoadingNotifications(false)
     }
   }
 
@@ -174,6 +225,37 @@ export default function ProfilePage() {
     }
   }
 
+  const markAsRead = async (notificationId: string) => {
+    try {
+      const response = await fetch('/api/profile/notifications', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ notificationId })
+      })
+      if (!response.ok) throw new Error('Failed to mark as read')
+
+      setNotifications(prev =>
+        prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
+      )
+      toast.success('Marked as read')
+    } catch (error) {
+      toast.error('Failed to update notification')
+    }
+  }
+
+  // ========== HELPER FUNCTIONS ==========
+  const getInitials = () => {
+    if (profile?.name) {
+      const parts = profile.name.split(' ')
+      return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}`.toUpperCase() : parts[0][0].toUpperCase()
+    }
+    return profile?.email[0].toUpperCase()
+  }
+
+  const bookingsCount = profile?._count?.bookings ?? 0
+  const notificationsCount = notifications.filter(n => !n.isRead).length
+
+  // ========== LOADING STATE ==========
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-violet-50 via-fuchsia-50 to-rose-50">
@@ -191,20 +273,10 @@ export default function ProfilePage() {
     )
   }
 
-  const getInitials = () => {
-    if (profile.name) {
-      const parts = profile.name.split(' ')
-      return parts.length > 1 ? `${parts[0][0]}${parts[1][0]}`.toUpperCase() : parts[0][0].toUpperCase()
-    }
-    return profile.email[0].toUpperCase()
-  }
-
-  const bookingsCount = profile?._count?.bookings ?? 0
-  const notificationsCount = profile?._count?.notifications ?? 0
-
+  // ========== RENDER ==========
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-violet-50 via-sky-50 via-teal-50 to-amber-50 p-4 sm:p-8 lg:p-12">
-      {/* Pastel Background Orbs */}
+      {/* Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-gradient-to-br from-violet-200/40 via-fuchsia-200/30 to-rose-200/40 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 left-10 w-[450px] h-[450px] bg-gradient-to-br from-sky-200/35 via-cyan-200/25 to-teal-200/35 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
@@ -286,7 +358,7 @@ export default function ProfilePage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormInput label="Full Name" id="name" icon={<User className="w-4 h-4" />} value={formData.name} onChange={(v) => setFormData({ ...formData, name: v })} disabled={!isEditing} />
-                  <FormInput label="Email" id="email" icon={<Mail className="w-4 h-4" />} value={profile.email} onChange={() => {}} disabled={true} verified={!!profile.emailVerified} />
+                  <FormInput label="Email" id="email" icon={<Mail className="w-4 h-4" />} value={profile.email} onChange={() => { }} disabled={true} verified={!!profile.emailVerified} />
                   <FormInput label="Phone" id="phone" icon={<Phone className="w-4 h-4" />} value={formData.phoneNumber} onChange={(v) => setFormData({ ...formData, phoneNumber: v })} disabled={!isEditing} />
                   <div className="space-y-2">
                     <Label className="flex items-center gap-2 text-slate-700 font-semibold">
@@ -362,23 +434,111 @@ export default function ProfilePage() {
             </Card>
           </TabsContent>
 
-          {/* Other tabs remain the same with updated styling */}
+          {/* Notifications Tab */}
           <TabsContent value="notifications">
             <Card className="bg-white/30 backdrop-blur-3xl rounded-[2rem] shadow-xl border border-white/40">
               <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-3xl font-black text-rose-700">
-                  <Bell className="w-8 h-8" /> Notifications
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 text-3xl font-black text-rose-700">
+                    <Bell className="w-8 h-8" /> Notifications
+                  </div>
+                  {notificationsCount > 0 && (
+                    <Badge className="bg-gradient-to-r from-rose-200 to-pink-200 text-rose-700 border-0 text-lg px-4 py-2">
+                      {notificationsCount} Unread
+                    </Badge>
+                  )}
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8">
-                <div className="text-center py-16">
-                  <Bell className="w-16 h-16 mx-auto text-slate-300" />
-                  <p className="text-slate-500 text-lg mt-4">No notifications</p>
-                </div>
+                {loadingNotifications ? (
+                  <div className="flex items-center justify-center py-16">
+                    <Loader2 className="w-8 h-8 animate-spin text-rose-500" />
+                  </div>
+                ) : notifications.length === 0 ? (
+                  <div className="text-center py-16 space-y-4">
+                    <Bell className="w-16 h-16 mx-auto text-slate-300" />
+                    <p className="text-slate-500 text-lg">No notifications</p>
+                    <p className="text-sm text-slate-400">We'll notify you when something important happens</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {notifications.map((notification) => (
+                      <div
+                        key={notification.id}
+                        className={`p-5 rounded-[1.5rem] backdrop-blur-xl border transition-all duration-300 cursor-pointer hover:scale-[1.01] ${notification.isRead
+                          ? 'bg-slate-100/40 border-slate-200/60'
+                          : 'bg-gradient-to-br from-rose-100/60 via-pink-100/50 to-fuchsia-100/60 border-rose-200/60 shadow-lg'
+                          }`}
+                        onClick={() => !notification.isRead && markAsRead(notification.id)}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`p-3 rounded-xl ${notification.type === 'success' ? 'bg-gradient-to-br from-emerald-200 to-teal-200' :
+                            notification.type === 'warning' ? 'bg-gradient-to-br from-amber-200 to-orange-200' :
+                              notification.type === 'error' ? 'bg-gradient-to-br from-rose-200 to-pink-200' :
+                                'bg-gradient-to-br from-sky-200 to-cyan-200'
+                            }`}>
+                            {notification.type === 'success' && <Activity className="w-5 h-5 text-emerald-700" />}
+                            {notification.type === 'warning' && <AlertTriangle className="w-5 h-5 text-amber-700" />}
+                            {notification.type === 'error' && <Bell className="w-5 h-5 text-rose-700" />}
+                            {notification.type === 'info' && <Bell className="w-5 h-5 text-sky-700" />}
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <h4 className="font-bold text-lg text-slate-800 leading-tight">
+                                {notification.title}
+                              </h4>
+                              {!notification.isRead && (
+                                <div className="h-2 w-2 rounded-full bg-rose-500 animate-pulse flex-shrink-0 mt-2" />
+                              )}
+                            </div>
+
+                            <p className="text-slate-700 mb-3 leading-relaxed">
+                              {notification.message}
+                            </p>
+
+                            <div className="flex items-center gap-3 text-sm">
+                              <span className="flex items-center gap-1 text-slate-500">
+                                <Clock className="w-3 h-3" />
+                                {formatTimeAgo(notification.createdAt)}
+                              </span>
+
+                              {notification.isBroadcast && (
+                                <Badge className="bg-gradient-to-r from-violet-200/70 to-fuchsia-200/70 text-violet-700 border-0 text-xs">
+                                  <Radio className="w-3 h-3 mr-1" />
+                                  Broadcast
+                                </Badge>
+                              )}
+
+                              {notification.isRead ? (
+                                <Badge className="bg-gradient-to-r from-slate-200/70 to-slate-300/70 text-slate-600 border-0 text-xs">
+                                  ✓ Read
+                                </Badge>
+                              ) : (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    markAsRead(notification.id)
+                                  }}
+                                  className="h-7 px-3 text-xs rounded-lg bg-white/60 hover:bg-white/80"
+                                >
+                                  Mark as read
+                                </Button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
 
+          {/* Security Tab */}
           <TabsContent value="security">
             <Card className="bg-white/30 backdrop-blur-3xl rounded-[2rem] shadow-xl border border-white/40">
               <CardHeader>
@@ -394,7 +554,7 @@ export default function ProfilePage() {
         </Tabs>
       </div>
 
-      {/* Modal */}
+      {/* Booking Details Modal */}
       <Dialog open={isBookingModalOpen} onOpenChange={setIsBookingModalOpen}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white/95 backdrop-blur-3xl rounded-[2rem] border-2 border-white/50">
           {loadingDetails ? (
@@ -501,6 +661,7 @@ export default function ProfilePage() {
   )
 }
 
+// ========== HELPER COMPONENTS ==========
 function FormInput({ label, id, value, onChange, disabled, verified, icon }: {
   label: string; id: string; value: string; onChange: (val: string) => void; disabled?: boolean; verified?: boolean; icon?: React.ReactNode
 }) {
