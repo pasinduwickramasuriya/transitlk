@@ -62,7 +62,7 @@ async function getPageData() {
 
     return { operator, fares, routes }
   } catch (error) {
-    console.error('❌ Error fetching fare data:', error)
+    console.error('Error fetching fare data:', error)
     return {
       operator: { id: DEFAULT_OPERATOR_ID, name: 'TransitLK Operator' },
       fares: [],

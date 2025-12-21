@@ -6,7 +6,7 @@ const DEFAULT_OPERATOR_ID = '507f1f77bcf86cd799439011'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    console.log('[TRACCAR] 📡 Incoming GPS data:', body)
+    console.log('[TRACCAR] Incoming GPS data:', body)
 
     // Handle different Traccar client app formats
     const id = body.device_id || body.deviceId || body.id
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const timestamp = body.location?.timestamp || body.timestamp
 
     if (!id || lat === undefined || lon === undefined) {
-      console.log('[TRACCAR] ❌ Missing required fields:', { id, lat, lon })
+      console.log('[TRACCAR]  Missing required fields:', { id, lat, lon })
       return NextResponse.json({ error: 'Missing device_id, latitude, longitude' }, { status: 400 })
     }
 
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const longitude = parseFloat(lon)
 
     if (isNaN(latitude) || isNaN(longitude) || latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
-      console.log('[TRACCAR] ❌ Invalid coordinates:', { latitude, longitude })
+      console.log('[TRACCAR]  Invalid coordinates:', { latitude, longitude })
       return NextResponse.json({ error: 'Invalid coordinates' }, { status: 400 })
     }
 
@@ -100,7 +100,7 @@ export async function POST(request: Request) {
       timestamp: position.timestamp
     })
   } catch (error: unknown) {
-    console.error('[TRACCAR] ❌ Server error:', error)
+    console.error('[TRACCAR]  Server error:', error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

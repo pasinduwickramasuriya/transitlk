@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
@@ -22,15 +23,15 @@ export default function BookTicketsPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // ✅ Client-side hydration fix
+  // Client-side hydration fix
   const [isClient, setIsClient] = useState(false)
   const [userLoggedIn, setUserLoggedIn] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
 
-  // ✅ Session monitoring
+  //  Session monitoring
   const [sessionTimeLeft, setSessionTimeLeft] = useState<number>(0)
 
-  // ✅ Check for login success from URL params
+  //    Check for login success from URL params
   const loginSuccess = searchParams?.get('loginSuccess') === 'true'
   const fromBooking = searchParams?.get('from') === 'booking'
 
@@ -51,7 +52,7 @@ export default function BookTicketsPage() {
   const [selectedSeats, setSelectedSeats] = useState<number[]>([])
   const [bookingData, setBookingData] = useState<any>(null)
 
-  // ✅ Function to update auth state
+  //   Function to update auth state
   const updateAuthState = useCallback(() => {
     const loggedIn = isUserLoggedIn()
     const user = getCurrentUser()
@@ -59,7 +60,7 @@ export default function BookTicketsPage() {
     setUserLoggedIn(loggedIn)
     setCurrentUser(user)
 
-    // ✅ Calculate time left
+    //    Calculate time left
     if (typeof window !== 'undefined') {
       const expiry = localStorage.getItem('user_expiry')
       if (expiry) {
@@ -75,23 +76,23 @@ export default function BookTicketsPage() {
     return loggedIn
   }, [])
 
-  // ✅ Client-side auth check (fixes hydration)
+  //    Client-side auth check (fixes hydration)
   useEffect(() => {
     setIsClient(true)
     updateAuthState()
     console.log('📍 Client-side auth check initialized')
   }, [updateAuthState])
 
-  // ✅ Session monitoring - check every second
+  //    Session monitoring - check every second
   useEffect(() => {
     if (!isClient) return
 
     const interval = setInterval(() => {
-      // ✅ Force check for expiry
+      //    Force check for expiry
       const wasLoggedOut = forceCheckExpiry()
 
       if (wasLoggedOut && userLoggedIn) {
-        // ✅ User was just logged out due to expiry
+        //    User was just logged out due to expiry
         console.log('🔒 Session expired - logging user out')
         setUserLoggedIn(false)
         setCurrentUser(null)
@@ -101,14 +102,14 @@ export default function BookTicketsPage() {
           description: 'Please sign in again to continue booking.'
         })
 
-        // ✅ If user is in the middle of booking, save their progress
+        //    If user is in the middle of booking, save their progress
         if (currentStep > 0) {
           toast.info('Your booking progress has been saved', {
             description: 'Sign in again to continue from where you left off.'
           })
         }
       } else {
-        // ✅ Update auth state and time left
+        //    Update auth state and time left
         updateAuthState()
       }
     }, 1000) // Check every second
@@ -116,7 +117,7 @@ export default function BookTicketsPage() {
     return () => clearInterval(interval)
   }, [isClient, userLoggedIn, currentStep, updateAuthState])
 
-  // ✅ Handle returning from login
+  //    Handle returning from login
   useEffect(() => {
     // Only run if we're on client and have auth data
     if (!isClient) return
@@ -124,7 +125,7 @@ export default function BookTicketsPage() {
     console.log('📍 BookTicketsPage loaded with params:', { loginSuccess, fromBooking })
 
     if (loginSuccess && fromBooking) {
-      // ✅ User just logged in and came from booking flow
+      //    User just logged in and came from booking flow
       const user = getCurrentUser()
       if (user) {
         setCurrentUser(user)
@@ -134,7 +135,7 @@ export default function BookTicketsPage() {
           description: 'Continue with your bus booking'
         })
 
-        // ✅ Check if we have saved booking data and auto-proceed
+        //    Check if we have saved booking data and auto-proceed
         const savedBusData = localStorage.getItem('selectedBusForBooking')
         if (savedBusData) {
           try {
@@ -145,7 +146,7 @@ export default function BookTicketsPage() {
               to: busData.route.endLocation,
               date: new Date().toISOString().split('T')[0]
             })
-            setCurrentStep(2) // ✅ Go directly to seat selection
+            setCurrentStep(2) //    Go directly to seat selection
             toast.success('🪑 Proceeding to seat selection...', {
               description: 'Your selected bus is ready for booking!'
             })
@@ -153,12 +154,12 @@ export default function BookTicketsPage() {
             // Clean up saved data
             localStorage.removeItem('selectedBusForBooking')
           } catch (error) {
-            console.error('❌ Error loading saved bus data:', error)
+            console.error(' Error loading saved bus data:', error)
           }
         }
       }
 
-      // ✅ Clean up URL params
+      //    Clean up URL params
       const cleanUrl = window.location.pathname
       window.history.replaceState({}, '', cleanUrl)
     }
@@ -209,13 +210,13 @@ export default function BookTicketsPage() {
     }
   }
 
-  // ✅ ENHANCED: Bus Selection with Login Check
+  //    ENHANCED: Bus Selection with Login Check
   const handleBusSelection = (route: RouteData, schedule: ScheduleData) => {
     console.log('🚌 Bus selection attempted')
 
-    // ✅ Check if user is logged in FIRST
+    //    Check if user is logged in FIRST
     if (!userLoggedIn) {
-      console.log('❌ User not logged in - saving bus data and redirecting')
+      console.log('     User not logged in - saving bus data and redirecting')
 
       const fare = route.fares.find(f => f.busType === schedule.bus.busType && f.isActive)
       if (!fare) {
@@ -223,19 +224,19 @@ export default function BookTicketsPage() {
         return
       }
 
-      // ✅ Save the selected bus data for after login
+      //    Save the selected bus data for after login
       const busData = { route, schedule, fare }
       localStorage.setItem('selectedBusForBooking', JSON.stringify(busData))
 
-      // ✅ Save current page URL for return
+      //    Save current page URL for return
       saveReturnUrl(window.location.pathname + '?from=booking&loginSuccess=true')
 
-      // ✅ Show login prompt
+      //    Show login prompt
       toast.error('🔒 Please sign in to book tickets!', {
         description: 'You need to be logged in to continue with seat selection.'
       })
 
-      // ✅ Redirect to login with booking context
+      //    Redirect to login with booking context
       const loginUrl = `/auth/signin?returnTo=${encodeURIComponent(window.location.pathname + '?from=booking&loginSuccess=true')}&from=booking`
       console.log('🔗 Redirecting to login:', loginUrl)
 
@@ -243,8 +244,8 @@ export default function BookTicketsPage() {
       return
     }
 
-    // ✅ User is logged in - proceed normally
-    console.log('✅ User is logged in - proceeding with bus selection')
+    //    User is logged in - proceed normally
+    console.log('User is logged in - proceeding with bus selection')
 
     const fare = route.fares.find(f => f.busType === schedule.bus.busType && f.isActive)
 
@@ -289,11 +290,11 @@ export default function BookTicketsPage() {
       date: new Date().toISOString().split('T')[0]
     })
 
-    // ✅ Clean up any saved booking data
+    //    Clean up any saved booking data
     localStorage.removeItem('selectedBusForBooking')
   }
 
-  // ✅ Format time left display
+  //    Format time left display
   const formatTimeLeft = (milliseconds: number): string => {
     const seconds = Math.ceil(milliseconds / 1000)
     if (seconds <= 0) return 'Expired'
@@ -307,7 +308,7 @@ export default function BookTicketsPage() {
     return `${remainingSeconds}s`
   }
 
-  // ✅ Show loading state during hydration
+  //    Show loading state during hydration
   if (!isClient) {
     return (
 
@@ -351,7 +352,7 @@ export default function BookTicketsPage() {
           currentStep={currentStep}
         />
 
-        {/* ✅ Enhanced Login Status Indicator - Only after hydration */}
+        {/*    Enhanced Login Status Indicator - Only after hydration */}
         {userLoggedIn && currentUser && (
           <div className="mb-6 flex justify-center">
             <div className={`inline-flex items-center px-4 py-2 backdrop-blur-sm rounded-full border shadow-sm transition-all duration-300 ${sessionTimeLeft <= 30000 // Last 30 seconds
@@ -397,7 +398,7 @@ export default function BookTicketsPage() {
           <RouteSelection
             routes={availableRoutes}
             searchData={searchData}
-            onBusSelection={handleBusSelection} // ✅ This now handles login check
+            onBusSelection={handleBusSelection} //    This now handles login check
             onBackToSearch={() => setCurrentStep(0)}
           />
         )}

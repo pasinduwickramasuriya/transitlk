@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
@@ -85,7 +86,7 @@ interface ViewState {
 
 export function PublicBusTrackingClient() {
 
-     // ✅ Simple auth check with window.location
+     //    Simple auth check with window.location
     useEffect(() => {
         const loggedIn = isUserLoggedIn()
         if (!loggedIn) {
@@ -105,7 +106,7 @@ export function PublicBusTrackingClient() {
                 // Session expired - redirect to home
                 toast.error('Your session has expired')
                 setTimeout(() => {
-                    window.location.href = '/' // ✅ Redirect to home page
+                    window.location.href = '/' //    Redirect to home page
                 }, 1000)
             }
         }, 5000) // Check every 5 seconds
@@ -149,7 +150,7 @@ export function PublicBusTrackingClient() {
         latitude: 6.9271,
         zoom: 10,
     })
-     const [user, setUser] = useState<User | null>(null)  // ✅ ADD THIS LINE IF MISSING
+     const [user, setUser] = useState<User | null>(null)  //    ADD THIS LINE IF MISSING
      
 
     useEffect(() => {
@@ -178,24 +179,24 @@ export function PublicBusTrackingClient() {
         })
 
         if (!response.ok) {
-            console.error('❌ Device fetch failed:', response.status)
+            console.error('  Device fetch failed:', response.status)
             return
         }
 
         const data = await response.json()
-        console.log('📥 Received data:', data)
-        console.log('📥 Devices array:', data.devices)
-        console.log('📥 Device count:', data.devices?.length)
+        console.log(' Received data:', data)
+        console.log(' Devices array:', data.devices)
+        console.log(' Device count:', data.devices?.length)
 
         if (isMountedRef.current && data.devices) {
-            console.log('✅ Setting devices state with', data.devices.length, 'devices')
+            console.log('   Setting devices state with', data.devices.length, 'devices')
             setDevices(data.devices)
-            console.log('✅ Devices state set!')
+            console.log('   Devices state set!')
         } else {
-            console.log('❌ NOT setting devices - mounted:', isMountedRef.current, 'hasData:', !!data.devices)
+            console.log('  NOT setting devices - mounted:', isMountedRef.current, 'hasData:', !!data.devices)
         }
     } catch (err) {
-        console.error('❌ Fetch error:', err)
+        console.error('  Fetch error:', err)
     }
 }, [])
 
@@ -249,7 +250,7 @@ export function PublicBusTrackingClient() {
                     })
                 }
 
-                console.log(`✅ Fetched ${data.positions?.length || 0} positions`)
+                console.log(`   Fetched ${data.positions?.length || 0} positions`)
             }
         } catch (err: any) {
             if (err.name === 'AbortError') {
@@ -262,7 +263,7 @@ export function PublicBusTrackingClient() {
                 return
             }
 
-            console.error('❌ Error fetching positions:', err.message)
+            console.error('  Error fetching positions:', err.message)
         }
     }, [])
 
@@ -277,14 +278,14 @@ export function PublicBusTrackingClient() {
             setLastUpdate(new Date())
             toast.success('🎉 Data refreshed successfully!')
         } catch (err: any) {
-            console.error('❌ Error refreshing data:', err)
+            console.error('  Error refreshing data:', err)
         } finally {
             if (isMountedRef.current) {
                 setLoading(false)
             }
         }
     }, [fetchDevices, fetchPositions])
-    // ✅ Auto-refresh: Calls refreshAllData() every 10 seconds (like auto-clicking the button)
+    //    Auto-refresh: Calls refreshAllData() every 10 seconds (like auto-clicking the button)
     useEffect(() => {
         if (!isLiveTracking) return
 
@@ -315,7 +316,7 @@ export function PublicBusTrackingClient() {
                 await Promise.all([fetchDevices(), fetchPositions()])
                 setLastUpdate(new Date())
             } catch (err: any) {
-                console.error('❌ Error initializing:', err)
+                console.error('  Error initializing:', err)
             } finally {
                 if (isMountedRef.current) {
                     setLoading(false)
@@ -360,7 +361,7 @@ export function PublicBusTrackingClient() {
 
     
 
-    // ✅ Auto-focus on search result
+    //    Auto-focus on search result
     useEffect(() => {
         const filteredDevices = getFilteredDevices()
         const devicesWithLocation = filteredDevices.filter(d => d.latestPosition)
@@ -1044,7 +1045,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         zoom: 10,
 //     })
 
-//     // ✅ Initialize component
+//     //    Initialize component
 //     useEffect(() => {
 //         setMounted(true)
 //         const currentUser = getCurrentUser()
@@ -1060,7 +1061,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         }
 //     }, [])
 
-//     // ✅ Fetch devices from API
+//     //    Fetch devices from API
 //     const fetchDevices = useCallback(async () => {
 //         if (!isMountedRef.current) return
 
@@ -1088,10 +1089,10 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //             if (isMountedRef.current) {
 //                 setDevices(data.devices || [])
 //                 setError(null)
-//                 console.log(`✅ Fetched ${data.devices?.length || 0} devices`)
+//                 console.log(`   Fetched ${data.devices?.length || 0} devices`)
 //             }
 //         } catch (err: any) {
-//             console.error('❌ Error fetching devices:', err)
+//             console.error('  Error fetching devices:', err)
 //             if (isMountedRef.current && err.name !== 'AbortError') {
 //                 setError(err instanceof Error ? err.message : 'Failed to load devices')
 //             }
@@ -1102,7 +1103,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         }
 //     }, [])
 
-//     // ✅ Fetch positions from API
+//     //    Fetch positions from API
 //     const fetchPositions = useCallback(async () => {
 //         if (!isMountedRef.current) return
 
@@ -1152,7 +1153,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //                     })
 //                 }
 
-//                 console.log(`✅ Fetched ${data.positions?.length || 0} positions`)
+//                 console.log(`   Fetched ${data.positions?.length || 0} positions`)
 //             }
 //         } catch (err: any) {
 //             if (err.name === 'AbortError') {
@@ -1165,11 +1166,11 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //                 return
 //             }
 
-//             console.error('❌ Error fetching positions:', err.message)
+//             console.error('  Error fetching positions:', err.message)
 //         }
 //     }, [])
 
-//     // ✅ Refresh all data
+//     //    Refresh all data
 //     const refreshAllData = useCallback(async () => {
 //         if (!isMountedRef.current) return
 
@@ -1180,7 +1181,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //             setLastUpdate(new Date())
 //             toast.success('🎉 Data refreshed successfully!')
 //         } catch (err: any) {
-//             console.error('❌ Error refreshing data:', err)
+//             console.error('  Error refreshing data:', err)
 //         } finally {
 //             if (isMountedRef.current) {
 //                 setLoading(false)
@@ -1188,7 +1189,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         }
 //     }, [fetchDevices, fetchPositions])
 
-//     // ✅ Initial data load
+//     //    Initial data load
 //     useEffect(() => {
 //         if (!MAPBOX_TOKEN) {
 //             toast.error('Mapbox token is missing')
@@ -1202,7 +1203,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //                 await Promise.all([fetchDevices(), fetchPositions()])
 //                 setLastUpdate(new Date())
 //             } catch (err: any) {
-//                 console.error('❌ Error initializing:', err)
+//                 console.error('  Error initializing:', err)
 //             } finally {
 //                 if (isMountedRef.current) {
 //                     setLoading(false)
@@ -1213,7 +1214,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         initData()
 //     }, [fetchDevices, fetchPositions])
 
-//     // ✅ Position updates every 3 seconds
+//     //    Position updates every 3 seconds
 //     useEffect(() => {
 //         if (intervalRef.current) {
 //             clearInterval(intervalRef.current)
@@ -1240,7 +1241,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         }
 //     }, [isLiveTracking, fetchPositions])
 
-//     // ✅ Auto-refresh every 10 seconds
+//     //    Auto-refresh every 10 seconds
 //     useEffect(() => {
 //         if (!isLiveTracking) return
 
@@ -1258,7 +1259,7 @@ function CuteStatsCard({ title, value, icon: Icon, gradient, bgGradient, isText 
 //         }
 //     }, [isLiveTracking, refreshAllData])
 
-//     // ✅ Auto-focus on search result
+//     //    Auto-focus on search result
 //     useEffect(() => {
 //         const filteredDevices = getFilteredDevices()
 //         const devicesWithLocation = filteredDevices.filter(d => d.latestPosition)

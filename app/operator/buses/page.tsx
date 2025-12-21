@@ -9,8 +9,8 @@ import { FleetTable } from '@/components/operator/FleetTable'
 import { FleetFilters } from '@/components/operator/FleetFilters'
 import { CreateBusDialog } from '@/components/operator/CreateBusDialog'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Plus, Bus, Activity, AlertTriangle, Wifi, Loader2 } from 'lucide-react'
+import { Card, CardContent, CardHeader} from '@/components/ui/card'
+import { Plus, Bus} from 'lucide-react'
 import { DynamicStatsCards } from '@/components/operator/DynamicStatsCards'
 
 export const metadata: Metadata = {

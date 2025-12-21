@@ -1,48 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// // This is the SIMPLEST way to check if user is logged in
-// export function isUserLoggedIn(): boolean {
-//   // Check if user data exists in localStorage
-//   const user = localStorage.getItem('user')
-//   return user !== null
-// }
-
-// export function getCurrentUser() {
-//   const user = localStorage.getItem('user')
-//   return user ? JSON.parse(user) : null
-// }
-
-// export function saveUser(userData: any) {
-//   localStorage.setItem('user', JSON.stringify(userData))
-// }
-
-// export function removeUser() {
-//   localStorage.removeItem('user')
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 'use client'
 
 import { getSession } from 'next-auth/react'
 
-// ✅ User type definition
+// User type definition
 export interface User {
   id: string
   name?: string | null
@@ -51,7 +12,7 @@ export interface User {
   image?: string | null
 }
 
-// ✅ Auto-cleanup expired sessions
+// Auto cleanup expired sessions
 function autoCleanupExpiredSession(): void {
   if (typeof window !== 'undefined') {
     const expiry = localStorage.getItem('user_expiry')
@@ -67,9 +28,9 @@ function autoCleanupExpiredSession(): void {
   }
 }
 
-// ✅ SIMPLE: Check if user is logged in (works anywhere)
+// SIMPLE: Check if user is logged in (works anywhere)
 export function isUserLoggedIn(): boolean {
-  // ✅ FIRST: Auto-cleanup expired sessions
+  // FIRST: Auto-cleanup expired sessions
   autoCleanupExpiredSession()
 
   // Then check localStorage for quick access
@@ -81,9 +42,9 @@ export function isUserLoggedIn(): boolean {
   return false
 }
 
-// ✅ Get current user data
+// Get current user data
 export function getCurrentUser(): User | null {
-  // ✅ FIRST: Auto-cleanup expired sessions
+  // FIRST Auto-cleanup expired sessions
   autoCleanupExpiredSession()
 
   if (typeof window !== 'undefined') {
@@ -93,25 +54,25 @@ export function getCurrentUser(): User | null {
   return null
 }
 
-// ✅ Save user data after login
+// Save user data after login
 export function saveUser(userData: User): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem('user', JSON.stringify(userData))
     localStorage.setItem('session_exists', 'true')
 
-    // ✅ Set 1-minute expiration
+    //  Set 1-minute expiration
     const expirationTime = new Date().getTime() + (20 * 60 * 1000) // 1 minute
     localStorage.setItem('user_expiry', expirationTime.toString())
 
-    console.log('✅ User saved to localStorage:', userData)
-    console.log('⏰ Session will expire at:', new Date(expirationTime).toLocaleTimeString())
+    console.log(' User saved to localStorage:', userData)
+    console.log(' Session will expire at:', new Date(expirationTime).toLocaleTimeString())
 
-    // ✅ Set up automatic cleanup timer
+    //  Set up automatic cleanup timer
     setupAutoCleanupTimer()
   }
 }
 
-// ✅ Set up timer to automatically remove user after expiration
+//Set up timer to automatically remove user after expiration
 function setupAutoCleanupTimer(): void {
   if (typeof window !== 'undefined') {
     const expiry = localStorage.getItem('user_expiry')
@@ -127,12 +88,12 @@ function setupAutoCleanupTimer(): void {
           console.log('🧹 Timer triggered - cleaning up expired session')
           if (isSessionExpired()) {
             // Session is expired, user data already removed
-            console.log('✅ Session cleaned up automatically')
+            console.log('Session cleaned up automatically')
 
             // Optional: Show toast notification
             if (typeof window !== 'undefined' && window.location.pathname !== '/auth/signin') {
               // You can add a toast here if needed
-              console.log('ℹ️ Session expired - user needs to sign in again')
+              console.log('ℹSession expired - user needs to sign in again')
             }
           }
         }, timeUntilExpiry)
@@ -141,7 +102,7 @@ function setupAutoCleanupTimer(): void {
   }
 }
 
-// ✅ Remove user data on logout
+//Remove user data on logout
 export function removeUser(): void {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('user')
@@ -149,11 +110,11 @@ export function removeUser(): void {
     localStorage.removeItem('user_expiry')
     localStorage.removeItem('returnTo') // Clear return URL too
 
-    console.log('✅ User removed from localStorage')
+    console.log('User removed from localStorage')
   }
 }
 
-// ✅ Check if user session is expired
+//Check if user session is expired
 export function isSessionExpired(): boolean {
   if (typeof window !== 'undefined') {
     const expiry = localStorage.getItem('user_expiry')
@@ -163,7 +124,7 @@ export function isSessionExpired(): boolean {
     const now = new Date().getTime()
 
     if (now > expirationTime) {
-      console.log('⚠️ Session expired, removing user data')
+      console.log('Session expired, removing user data')
       removeUser() // Auto-cleanup expired session
       return true
     }
@@ -171,10 +132,10 @@ export function isSessionExpired(): boolean {
   return false
 }
 
-// ✅ Enhanced check with NextAuth session
+//Enhanced check with NextAuth session
 export async function checkAuthStatus(): Promise<boolean> {
   try {
-    // ✅ FIRST: Auto-cleanup expired sessions
+    //FIRST: Auto-cleanup expired sessions
     autoCleanupExpiredSession()
 
     // First check localStorage for quick response
@@ -201,12 +162,12 @@ export async function checkAuthStatus(): Promise<boolean> {
     removeUser()
     return false
   } catch (error) {
-    console.error('❌ Auth check failed:', error)
+    console.error('Auth check failed:', error)
     return false
   }
 }
 
-// ✅ Get return URL for redirecting after login
+//Get return URL for redirecting after login
 export function getReturnUrl(): string {
   if (typeof window !== 'undefined') {
     return localStorage.getItem('returnTo') || '/dashboard'
@@ -214,21 +175,21 @@ export function getReturnUrl(): string {
   return '/dashboard'
 }
 
-// ✅ Save return URL before redirecting to login
+//Save return URL before redirecting to login
 export function saveReturnUrl(url: string): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem('returnTo', url)
   }
 }
 
-// ✅ Clear return URL after successful login
+//Clear return URL after successful login
 export function clearReturnUrl(): void {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('returnTo')
   }
 }
 
-// ✅ Debug function to see auth state
+//Debug function to see auth state
 export function debugAuthState(): void {
   if (typeof window !== 'undefined') {
     const expiry = localStorage.getItem('user_expiry')
@@ -248,13 +209,13 @@ export function debugAuthState(): void {
   }
 }
 
-// ✅ Force check session expiry (call this from components)
+//Force check session expiry (call this from components)
 export function forceCheckExpiry(): boolean {
   autoCleanupExpiredSession()
   return !isUserLoggedIn()
 }
 
-// ✅ Initialize auto-cleanup on page load
+//Initialize auto-cleanup on page load
 if (typeof window !== 'undefined') {
   // Set up cleanup timer when module loads
   const expiry = localStorage.getItem('user_expiry')

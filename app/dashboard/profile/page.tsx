@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 
-// ========== INTERFACES ==========
+// INTERFACES 
 interface UserProfile {
   id: string
   name: string | null
@@ -114,7 +114,7 @@ const formatTimeAgo = (date: Date | string) => {
   return formatDisplay(date)
 }
 
-// ========== MAIN COMPONENT ==========
+// MAIN COMPONENT 
 export default function ProfilePage() {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -313,6 +313,16 @@ export default function ProfilePage() {
                 </Button>
               )}
             </div>
+            {/*  DASHBOARD LINK */}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push('/dashboard')}
+              className="text-black hover:text-[#1ebcf1] hover:bg-[#1ebcf1]/10 h-8 mr-2"
+            >
+              {/* <LayoutDashboard className="w-4 h-4 mr-2" /> */}
+              Dashboard
+            </Button>
           </div>
         </header>
 
@@ -327,9 +337,6 @@ export default function ProfilePage() {
             </TabsTrigger>
             <TabsTrigger value="notifications" className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-rose-200/80 data-[state=active]:to-pink-200/80 data-[state=active]:text-rose-700">
               <Bell className="w-4 h-4 mr-2" />Alerts ({notificationsCount})
-            </TabsTrigger>
-            <TabsTrigger value="security" className="rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-teal-200/80 data-[state=active]:to-emerald-200/80 data-[state=active]:text-teal-700">
-              <Shield className="w-4 h-4 mr-2" />Security
             </TabsTrigger>
           </TabsList>
 
@@ -458,7 +465,7 @@ export default function ProfilePage() {
                   <div className="text-center py-16 space-y-4">
                     <Bell className="w-16 h-16 mx-auto text-slate-300" />
                     <p className="text-slate-500 text-lg">No notifications</p>
-                    <p className="text-sm text-slate-400">We'll notify you when something important happens</p>
+                    <p className="text-sm text-slate-400">We will notify you when something important happens</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -534,20 +541,6 @@ export default function ProfilePage() {
                     ))}
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Security Tab */}
-          <TabsContent value="security">
-            <Card className="bg-white/30 backdrop-blur-3xl rounded-[2rem] shadow-xl border border-white/40">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3 text-3xl font-black text-teal-700">
-                  <Shield className="w-8 h-8" /> Security Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-8">
-                <p className="text-slate-600">Manage your security settings</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -701,3 +694,14 @@ function InfoRow({ label, value, badge = false, className = '' }: { label: strin
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+

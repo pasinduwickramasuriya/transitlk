@@ -1,26 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
     LayoutDashboard,
     Bus,
     Route,
-    MapPin,
-    Users,
     Calendar,
     BarChart3,
-    Settings,
-    HelpCircle,
-    ChevronLeft,
-    ChevronRight,
     Navigation,
-    Clock,
     AlertTriangle,
-    UserCheck,
     Map,
     DollarSign
 } from 'lucide-react'
@@ -66,7 +58,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             icon: DollarSign,
             badge: null,
         },
-         {
+        {
             title: 'Notifications',
             href: '/operator/notifications ',
             icon: AlertTriangle,
@@ -76,15 +68,9 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             title: 'Bookings',
             href: '/operator/bookings',
             icon: Calendar,
-            badge: '24 Today',
+            badge: 'live',
         },
-        {
-            title: 'Passengers',
-            href: '/operator/passengers',
-            icon: Users,
-            badge: null,
-        },
-        
+
     ]
 
     const secondaryItems = [
@@ -94,28 +80,6 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             icon: BarChart3,
             badge: null,
         },
-        {
-            title: 'Reports',
-            href: '/operator/reports',
-            icon: Clock,
-            badge: null,
-        },
-        {
-            title: 'Alerts',
-            href: '/operator/alerts',
-            icon: AlertTriangle,
-            badge: '3 New',
-        }
-    ]
-
-    const bottomItems = [
-        {
-            title: 'Settings',
-            href: '/operator/settings',
-            icon: Settings,
-            badge: null,
-        },
-        
     ]
 
     const isActive = (href: string) => {
@@ -132,34 +96,6 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
             "flex flex-col h-full",
             className
         )}>
-            {/* Header */}
-            <div className="p-4 border-b border-gray-200">
-                <div className="flex items-center justify-between">
-                    {!collapsed && (
-                        <div className="flex items-center space-x-2">
-                            <div className="bg-blue-600 rounded-lg p-2">
-                                <Bus className="h-6 w-6 text-white" />
-                            </div>
-                            <div>
-                                <h1 className="font-bold text-gray-900">TransitLK</h1>
-                                <p className="text-xs text-gray-500">Operator Panel</p>
-                            </div>
-                        </div>
-                    )}
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setCollapsed(!collapsed)}
-                        className="h-8 w-8 p-0"
-                    >
-                        {collapsed ? (
-                            <ChevronRight className="h-4 w-4" />
-                        ) : (
-                            <ChevronLeft className="h-4 w-4" />
-                        )}
-                    </Button>
-                </div>
-            </div>
 
             {/* Operator Info */}
             {!collapsed && (
@@ -169,8 +105,8 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
                             <Navigation className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                            <p className="font-medium text-gray-900">ABC Transport</p>
-                            <p className="text-sm text-gray-600">License: OP-2024-001</p>
+                            <p className="font-medium text-gray-900">TransitLK</p>
+
                         </div>
                     </div>
                 </div>
@@ -211,18 +147,6 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
                         />
                     ))}
                 </nav>
-            </div>
-
-            {/* Bottom Navigation */}
-            <div className="border-t border-gray-200 p-2">
-                {bottomItems.map((item) => (
-                    <SidebarItem
-                        key={item.href}
-                        item={item}
-                        isActive={isActive(item.href)}
-                        collapsed={collapsed}
-                    />
-                ))}
             </div>
 
             {/* Collapse Footer */}

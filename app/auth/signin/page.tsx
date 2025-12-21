@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -25,7 +26,7 @@ import {
   Heart
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { saveUser, getReturnUrl, clearReturnUrl, debugAuthState } from '@/utils/auth' // ✅ Import auth functions
+import { saveUser, getReturnUrl, clearReturnUrl, debugAuthState } from '@/utils/auth' //     Import auth functions
 import { Checkbox } from '@/components/ui/checkbok'
 
 const loginSchema = z.object({
@@ -45,7 +46,7 @@ export default function SignInPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // ✅ Get return URL from query params or localStorage
+  //     Get return URL from query params or localStorage
   const returnTo = searchParams?.get('returnTo') || getReturnUrl()
   const fromBooking = searchParams?.get('from') === 'booking'
 
@@ -57,10 +58,10 @@ export default function SignInPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  // ✅ Debug auth state on component mount
+  //     Debug auth state on component mount
   useEffect(() => {
     debugAuthState()
-    console.log('📍 SignIn page loaded with returnTo:', returnTo)
+    console.log(' SignIn page loaded with returnTo:', returnTo)
   }, [returnTo])
 
   const onSubmit = async (data: LoginInput) => {
@@ -84,12 +85,12 @@ export default function SignInPage() {
           description: 'Please check your credentials and try again.'
         })
       } else {
-        // ✅ Get session and save user data
+        //     Get session and save user data
         const session = await getSession()
         console.log('👤 Session after login:', session)
 
         if (session?.user) {
-          // ✅ Save user data to localStorage for quick access
+          //     Save user data to localStorage for quick access
           const userData = {
             id: session.user.id || session.user.email || '',
             name: session.user.name,
@@ -99,13 +100,13 @@ export default function SignInPage() {
           }
 
           saveUser(userData)
-          console.log('✅ User data saved:', userData)
+          console.log('    User data saved:', userData)
 
           toast.success('Welcome back!', {
             description: `Hello ${session.user.name || session.user.email}! 🎉`
           })
 
-          // ✅ Determine redirect location
+          //     Determine redirect location
           let redirectPath = '/dashboard' // Default
 
           if (fromBooking && returnTo && returnTo !== '/dashboard') {
@@ -127,7 +128,7 @@ export default function SignInPage() {
 
           console.log('🎯 Redirecting to:', redirectPath)
 
-          // ✅ Small delay for better UX
+          //     Small delay for better UX
           setTimeout(() => {
             router.push(redirectPath)
           }, 1000)
@@ -139,7 +140,7 @@ export default function SignInPage() {
         }
       }
     } catch (error) {
-      console.error('❌ Login error:', error)
+      console.error('  Login error:', error)
       setError('An unexpected error occurred. Please try again.')
       toast.error('Something went wrong', {
         description: 'Please check your connection and try again.'
@@ -154,14 +155,14 @@ export default function SignInPage() {
     try {
       console.log('🔄 Attempting Google sign in...')
 
-      // ✅ Include return URL in Google sign in
+      //     Include return URL in Google sign in
       const callbackUrl = returnTo || '/dashboard'
       await signIn('google', {
         callbackUrl,
         redirect: true
       })
     } catch (error) {
-      console.error('❌ Google sign in error:', error)
+      console.error('  Google sign in error:', error)
       setError('Failed to sign in with Google. Please try again.')
       toast.error('Google sign in failed')
       setIsLoading(false)
@@ -204,7 +205,7 @@ export default function SignInPage() {
               </div>
             </div>
 
-            {/* ✅ Enhanced welcome text based on booking context */}
+            {/*     Enhanced welcome text based on booking context */}
             <h2 className="text-6xl font-black text-slate-800 leading-tight mb-8">
               {fromBooking ? (
                 <>
@@ -296,7 +297,7 @@ export default function SignInPage() {
               </div>
             </div>
 
-            {/* ✅ Enhanced Floating Status Badge */}
+            {/*     Enhanced Floating Status Badge */}
             <div className="flex justify-center mb-8">
               <div className="inline-flex items-center px-6 py-3 bg-white/20 backdrop-blur-xl rounded-full border border-white/30 shadow-lg">
                 <Sparkles className="h-4 w-4 text-rose-400 mr-2 animate-spin" />
@@ -433,7 +434,7 @@ export default function SignInPage() {
                     </Link>
                   </div>
 
-                  {/* ✅ Enhanced Sign In Button */}
+                  {/*     Enhanced Sign In Button */}
                   <Button
                     type="submit"
                     className="w-full h-14 bg-gradient-to-r from-rose-500 via-pink-500 to-violet-600 hover:from-rose-600 hover:via-pink-600 hover:to-violet-700 text-white rounded-2xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-rose-500/25 disabled:opacity-70"
@@ -486,7 +487,7 @@ export default function SignInPage() {
                 {/* Sign Up Link */}
                 <div className="text-center mt-8">
                   <p className="text-slate-600 text-lg font-medium">
-                    Don't have an account?{' '}
+                    Dont have an account?{' '}
                     <Link
                       href="/auth/signup"
                       className="text-violet-700 hover:text-violet-800 font-bold transition-colors hover:underline"

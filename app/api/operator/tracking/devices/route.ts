@@ -84,7 +84,7 @@ export async function GET(request: Request) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.error('❌ Error fetching devices:', error)
+    console.error(' Error fetching devices:', error)
     return NextResponse.json(
       {
         error: 'Failed to fetch devices',
