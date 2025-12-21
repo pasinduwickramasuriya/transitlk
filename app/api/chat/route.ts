@@ -6,13 +6,14 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(req: Request) {
     try {
-        // Get user‰s message from request
+        // Get users message from request
         const { message } = await req.json();
 
         // Create model with system instructions this is where you teach the AI
         const model = genAI.getGenerativeModel({
             // model: 'gemini-2.0-flash-exp',
-            model: 'gemini-2.5-flash',
+            // model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-flash-lite',
             systemInstruction: `
     You are a helpful AI assistant for Sri Lankan public bus transportation operated by SLTB (Sri Lanka Transport Board) and NTC (National Transport Commission).
     

@@ -9,7 +9,7 @@ interface Message {
 
 export default function BusAssistant() {
     const [messages, setMessages] = useState<Message[]>([
-        { text: "Hi! 👋 Ask me about Sri Lankan buses!", isUser: false }
+        { text: "Hi! Ask me about Sri Lankan buses!", isUser: false }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -66,8 +66,8 @@ export default function BusAssistant() {
                         {messages.map((msg, i) => (
                             <div key={i} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${msg.isUser
-                                        ? 'bg-gradient-to-r from-rose-400 via-pink-400 to-violet-500 text-white shadow-lg'
-                                        : 'bg-white/60 backdrop-blur-xl shadow-md border border-rose-200/40 text-slate-700'
+                                    ? 'bg-gradient-to-r from-rose-400 via-pink-400 to-violet-500 text-white shadow-lg'
+                                    : 'bg-white/60 backdrop-blur-xl shadow-md border border-rose-200/40 text-slate-700'
                                     }`}>
                                     {msg.text}
                                 </div>

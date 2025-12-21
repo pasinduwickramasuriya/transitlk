@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // // This is the SIMPLEST way to check if user is logged in
 // export function isUserLoggedIn(): boolean {
 //   // Check if user data exists in localStorage
@@ -57,7 +58,7 @@ function autoCleanupExpiredSession(): void {
     if (expiry) {
       const expirationTime = parseInt(expiry)
       const now = new Date().getTime()
-      
+
       if (now > expirationTime) {
         console.log('🧹 Auto-cleaning expired session')
         removeUser() // Auto-cleanup expired session
@@ -70,7 +71,7 @@ function autoCleanupExpiredSession(): void {
 export function isUserLoggedIn(): boolean {
   // ✅ FIRST: Auto-cleanup expired sessions
   autoCleanupExpiredSession()
-  
+
   // Then check localStorage for quick access
   if (typeof window !== 'undefined') {
     const user = localStorage.getItem('user')
@@ -84,7 +85,7 @@ export function isUserLoggedIn(): boolean {
 export function getCurrentUser(): User | null {
   // ✅ FIRST: Auto-cleanup expired sessions
   autoCleanupExpiredSession()
-  
+
   if (typeof window !== 'undefined') {
     const user = localStorage.getItem('user')
     return user ? JSON.parse(user) : null
@@ -99,12 +100,12 @@ export function saveUser(userData: User): void {
     localStorage.setItem('session_exists', 'true')
 
     // ✅ Set 1-minute expiration
-    const expirationTime = new Date().getTime() + (1 * 60 * 1000) // 1 minute
+    const expirationTime = new Date().getTime() + (20 * 60 * 1000) // 1 minute
     localStorage.setItem('user_expiry', expirationTime.toString())
 
     console.log('✅ User saved to localStorage:', userData)
     console.log('⏰ Session will expire at:', new Date(expirationTime).toLocaleTimeString())
-    
+
     // ✅ Set up automatic cleanup timer
     setupAutoCleanupTimer()
   }
@@ -118,16 +119,16 @@ function setupAutoCleanupTimer(): void {
       const expirationTime = parseInt(expiry)
       const now = new Date().getTime()
       const timeUntilExpiry = expirationTime - now
-      
+
       if (timeUntilExpiry > 0) {
         console.log(`⏰ Setting up auto-cleanup timer for ${timeUntilExpiry}ms`)
-        
+
         setTimeout(() => {
           console.log('🧹 Timer triggered - cleaning up expired session')
           if (isSessionExpired()) {
             // Session is expired, user data already removed
             console.log('✅ Session cleaned up automatically')
-            
+
             // Optional: Show toast notification
             if (typeof window !== 'undefined' && window.location.pathname !== '/auth/signin') {
               // You can add a toast here if needed
@@ -175,7 +176,7 @@ export async function checkAuthStatus(): Promise<boolean> {
   try {
     // ✅ FIRST: Auto-cleanup expired sessions
     autoCleanupExpiredSession()
-    
+
     // First check localStorage for quick response
     if (isUserLoggedIn() && !isSessionExpired()) {
       return true
@@ -233,7 +234,7 @@ export function debugAuthState(): void {
     const expiry = localStorage.getItem('user_expiry')
     const now = new Date().getTime()
     const timeLeft = expiry ? parseInt(expiry) - now : 0
-    
+
     console.log('🔍 Auth Debug State:', {
       isLoggedIn: isUserLoggedIn(),
       user: getCurrentUser(),
