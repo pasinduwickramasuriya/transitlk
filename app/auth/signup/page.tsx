@@ -144,12 +144,12 @@ export default function SignUpPage() {
         <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-br from-rose-200/40 via-pink-200/30 to-purple-200/40 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-br from-blue-200/35 via-cyan-200/30 to-emerald-200/35 rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-violet-200/30 via-indigo-200/25 to-blue-200/30 rounded-full blur-3xl animate-pulse delay-500"></div>
-        
+
         {/* Floating elements */}
         <div className="absolute top-32 left-1/4 w-6 h-6 bg-rose-300/60 rounded-full animate-bounce delay-300 shadow-lg"></div>
         <div className="absolute top-64 right-1/3 w-4 h-4 bg-violet-400/70 rounded-full animate-bounce delay-700 shadow-md"></div>
         <div className="absolute bottom-40 left-1/2 w-5 h-5 bg-cyan-300/80 rounded-full animate-bounce delay-500 shadow-lg"></div>
-        
+
         {/* Subtle grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000005_1px,transparent_1px),linear-gradient(to_bottom,#00000005_1px,transparent_1px)] bg-[size:60px_60px]"></div>
       </div>
@@ -159,17 +159,21 @@ export default function SignUpPage() {
         <div className="hidden lg:flex lg:w-2/5 flex-col justify-center p-12 xl:p-16">
           <div className="max-w-lg">
             {/* Logo */}
-            <div className="flex items-center mb-12">
-              <div className="w-16 h-16 bg-gradient-to-br from-rose-400 via-pink-500 to-violet-600 rounded-3xl flex items-center justify-center shadow-2xl">
-                <Navigation className="h-9 w-9 text-white" />
+            <Link href="/" className="inline-block">
+              <div className="flex items-center mb-12 cursor-pointer">
+                <div className="w-16 h-16 bg-gradient-to-br from-rose-400 via-pink-500 to-violet-600 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Navigation className="h-9 w-9 text-white" />
+                </div>
+                <div className="ml-5">
+                  <h1 className="text-4xl font-black bg-gradient-to-r from-violet-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
+                    TransitLK
+                  </h1>
+                  <p className="text-sm font-medium text-violet-600">
+                    Smart Transit Solutions
+                  </p>
+                </div>
               </div>
-              <div className="ml-5">
-                <h1 className="text-4xl font-black bg-gradient-to-r from-violet-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
-                  TransitLK
-                </h1>
-                <p className="text-sm font-medium text-violet-600">Smart Transit Solutions</p>
-              </div>
-            </div>
+            </Link>
 
             {/* Welcome Text */}
             <h2 className="text-6xl font-black text-slate-800 leading-tight mb-8">
@@ -284,18 +288,16 @@ export default function SignUpPage() {
                       Full Name
                     </Label>
                     <div className="relative">
-                      <User className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${
-                        focusedField === 'name' ? 'text-violet-600' : 'text-slate-500'
-                      }`} />
+                      <User className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${focusedField === 'name' ? 'text-violet-600' : 'text-slate-500'
+                        }`} />
                       <Input
                         id="name"
                         type="text"
                         placeholder="Enter your full name"
-                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${
-                          focusedField === 'name'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
-                        } ${errors.name ? 'border-red-400/60 bg-red-50/30' : ''}`}
+                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'name'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          } ${errors.name ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('name')}
                         disabled={isLoading}
                         onFocus={() => setFocusedField('name')}
@@ -316,18 +318,16 @@ export default function SignUpPage() {
                       Email Address
                     </Label>
                     <div className="relative">
-                      <Mail className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${
-                        focusedField === 'email' ? 'text-violet-600' : 'text-slate-500'
-                      }`} />
+                      <Mail className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${focusedField === 'email' ? 'text-violet-600' : 'text-slate-500'
+                        }`} />
                       <Input
                         id="email"
                         type="email"
                         placeholder="Enter your email"
-                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${
-                          focusedField === 'email'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
-                        } ${errors.email ? 'border-red-400/60 bg-red-50/30' : ''}`}
+                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'email'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          } ${errors.email ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('email')}
                         disabled={isLoading}
                         onFocus={() => setFocusedField('email')}
@@ -348,18 +348,16 @@ export default function SignUpPage() {
                       Phone Number <span className="text-slate-500 text-xs font-normal">(Optional)</span>
                     </Label>
                     <div className="relative">
-                      <Phone className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${
-                        focusedField === 'phoneNumber' ? 'text-violet-600' : 'text-slate-500'
-                      }`} />
+                      <Phone className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${focusedField === 'phoneNumber' ? 'text-violet-600' : 'text-slate-500'
+                        }`} />
                       <Input
                         id="phoneNumber"
                         type="tel"
                         placeholder="+94 77 123 4567"
-                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${
-                          focusedField === 'phoneNumber'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
-                        } ${errors.phoneNumber ? 'border-red-400/60 bg-red-50/30' : ''}`}
+                        className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'phoneNumber'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          } ${errors.phoneNumber ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('phoneNumber')}
                         disabled={isLoading}
                         onFocus={() => setFocusedField('phoneNumber')}
@@ -380,18 +378,16 @@ export default function SignUpPage() {
                       Password
                     </Label>
                     <div className="relative">
-                      <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${
-                        focusedField === 'password' ? 'text-violet-600' : 'text-slate-500'
-                      }`} />
+                      <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${focusedField === 'password' ? 'text-violet-600' : 'text-slate-500'
+                        }`} />
                       <Input
                         id="password"
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Create a password"
-                        className={`pl-12 pr-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${
-                          focusedField === 'password'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
-                        } ${errors.password ? 'border-red-400/60 bg-red-50/30' : ''}`}
+                        className={`pl-12 pr-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'password'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          } ${errors.password ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('password')}
                         disabled={isLoading}
                         onFocus={() => setFocusedField('password')}
@@ -411,10 +407,9 @@ export default function SignUpPage() {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs">
                           <span className="text-slate-600 font-medium">Password strength</span>
-                          <span className={`font-bold ${
-                            passwordStrength.strength <= 2 ? 'text-red-600' :
+                          <span className={`font-bold ${passwordStrength.strength <= 2 ? 'text-red-600' :
                             passwordStrength.strength <= 3 ? 'text-yellow-600' : 'text-emerald-600'
-                          }`}>
+                            }`}>
                             {passwordStrength.label}
                           </span>
                         </div>
@@ -441,18 +436,16 @@ export default function SignUpPage() {
                       Confirm Password
                     </Label>
                     <div className="relative">
-                      <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${
-                        focusedField === 'confirmPassword' ? 'text-violet-600' : 'text-slate-500'
-                      }`} />
+                      <Lock className={`absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 transition-colors ${focusedField === 'confirmPassword' ? 'text-violet-600' : 'text-slate-500'
+                        }`} />
                       <Input
                         id="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder="Confirm your password"
-                        className={`pl-12 pr-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${
-                          focusedField === 'confirmPassword'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
-                        } ${errors.confirmPassword ? 'border-red-400/60 bg-red-50/30' : ''}`}
+                        className={`pl-12 pr-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'confirmPassword'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          } ${errors.confirmPassword ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('confirmPassword')}
                         disabled={isLoading}
                         onFocus={() => setFocusedField('confirmPassword')}

@@ -193,18 +193,22 @@ export default function SignInPage() {
         <div className="hidden lg:flex lg:w-1/2 flex-col justify-center p-12 xl:p-16">
           <div className="max-w-lg">
             {/* Logo */}
-            <div className="flex items-center mb-12">
-              <div className="w-16 h-16 bg-gradient-to-br from-rose-400 via-pink-500 to-violet-600 rounded-3xl flex items-center justify-center shadow-2xl">
-                <Navigation className="h-9 w-9 text-white" />
+            <Link href="/" className="inline-block">
+              <div className="flex items-center mb-12 cursor-pointer">
+                <div className="w-16 h-16 bg-gradient-to-br from-rose-400 via-pink-500 to-violet-600 rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Navigation className="h-9 w-9 text-white" />
+                </div>
+                <div className="ml-5">
+                  <h1 className="text-4xl font-black bg-gradient-to-r from-violet-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
+                    TransitLK
+                  </h1>
+                  <p className="text-sm font-medium text-violet-600">
+                    Smart Transit Solutions
+                  </p>
+                </div>
               </div>
-              <div className="ml-5">
-                <h1 className="text-4xl font-black bg-gradient-to-r from-violet-600 via-rose-600 to-pink-600 bg-clip-text text-transparent">
-                  TransitLK
-                </h1>
-                <p className="text-sm font-medium text-violet-600">Smart Transit Solutions</p>
-              </div>
-            </div>
-
+            </Link>
+            
             {/*     Enhanced welcome text based on booking context */}
             <h2 className="text-6xl font-black text-slate-800 leading-tight mb-8">
               {fromBooking ? (
@@ -354,8 +358,8 @@ export default function SignInPage() {
                         type="email"
                         placeholder="Enter your email"
                         className={`pl-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'email'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
                           } ${errors.email ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('email')}
                         disabled={isLoading}
@@ -386,8 +390,8 @@ export default function SignInPage() {
                         type={showPassword ? 'text' : 'password'}
                         placeholder="Enter your password"
                         className={`pl-12 pr-12 h-12 rounded-2xl border-2 transition-all duration-300 bg-white/30 backdrop-blur-sm font-medium ${focusedField === 'password'
-                            ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
-                            : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
+                          ? 'border-violet-400/60 bg-white/50 shadow-lg shadow-violet-500/25'
+                          : 'border-white/40 hover:border-white/60 focus:border-violet-400/60 hover:bg-white/40'
                           } ${errors.password ? 'border-red-400/60 bg-red-50/30' : ''}`}
                         {...register('password')}
                         disabled={isLoading}

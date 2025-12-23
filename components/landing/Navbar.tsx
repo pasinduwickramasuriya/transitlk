@@ -59,7 +59,7 @@ export function Navbar() {
     { name: 'Home', href: '/', icon: Home },
     { name: 'Services', href: '/booking', icon: Settings },
     { name: 'Live Map', href: '/tracking', icon: MapPin },
-    { name: 'Analytics', href: '#analytics', icon: Activity }
+    { name: 'Analytics', href: '/analytics', icon: Activity }
   ]
 
   // Helper function to check if nav item is active
