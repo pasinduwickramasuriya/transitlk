@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
   Navigation,
@@ -68,11 +69,14 @@ export function Navbar() {
     return pathname.startsWith(href)
   }
 
-  function handleLogout() {
+  async function handleLogout() {
+    // 1. Clear local storage first
     removeUser()
     setLoggedIn(false)
     setUser(null)
-    window.location.href = '/auth/signin'
+
+    // 2. Clear NextAuth session (this handles redirect)
+    await signOut({ callbackUrl: '/auth/signin' })
   }
 
   return (

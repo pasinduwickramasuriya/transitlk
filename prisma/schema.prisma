@@ -206,7 +206,7 @@ model Booking {
   bus      Bus       @relation(fields: [busId], references: [id])
   payment  Payment?
   ticket   Ticket?
-  feedback Feedback?
+  feedback Feedback[]
 
   @@map("bookings")
 }
@@ -276,14 +276,14 @@ model Notification {
 model Feedback {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
-  bookingId String   @unique @db.ObjectId
+  bookingId String?   @db.ObjectId
   rating    Int      @default(5)
   comment   String?
   category  String?
   createdAt DateTime @default(now())
 
-  user    User    @relation(fields: [userId], references: [id])
-  booking Booking @relation(fields: [bookingId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+  booking Booking? @relation(fields: [bookingId], references: [id])
 
   @@map("feedback")
 }

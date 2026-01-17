@@ -98,9 +98,9 @@
 //           Go to nextjs.org →
 //         </a>
 //       </footer>
-      
+
 //     </div>
-    
+
 //   );
 // }
 
@@ -183,7 +183,7 @@
 //           <div className="absolute top-0 right-0 -translate-y-12 translate-x-1/3 w-80 h-80 bg-gradient-to-br from-blue-200/30 to-cyan-200/30 rounded-full blur-3xl" />
 //           <div className="absolute bottom-0 left-0 translate-y-12 -translate-x-1/3 w-80 h-80 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full blur-3xl" />
 //         </div>
-        
+
 //         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 //           <div className="text-center">
 //             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
@@ -520,7 +520,9 @@ import { HeroSection } from '@/components/landing/HeroSection'
 import { FeaturesSection } from '@/components/landing/FeaturesSection'
 import { HowItWorksSection } from '@/components/landing/HowItWorksSection'
 import { BenefitsSection } from '@/components/landing/BenefitsSection'
-import { CTASection } from '@/components/landing/CTASection'
+import { ReviewsSection } from '@/components/landing/ReviewsSection'
+import { CTASection } from "@/components/landing/CTASection";
+import { Providers } from "@/components/providers";
 import { Footer } from '@/components/landing/Footer'
 import BusAssistant from '@/components/BusAssistant'
 
@@ -532,9 +534,12 @@ export default function HomePage() {
       <FeaturesSection />
       <HowItWorksSection />
       <BenefitsSection />
+      <Providers>
+        <ReviewsSection />
+      </Providers>
       <CTASection />
       <Footer />
-      <BusAssistant/>
+      <BusAssistant />
     </div>
   )
 }

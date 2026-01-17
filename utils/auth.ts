@@ -61,7 +61,7 @@ export function saveUser(userData: User): void {
     localStorage.setItem('session_exists', 'true')
 
     //  Set 1-minute expiration
-    const expirationTime = new Date().getTime() + (20 * 60 * 1000) // 1 minute
+    const expirationTime = new Date().getTime() + (20 * 60 * 1000) // 20 minute
     localStorage.setItem('user_expiry', expirationTime.toString())
 
     console.log(' User saved to localStorage:', userData)
