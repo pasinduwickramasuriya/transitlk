@@ -1,170 +1,124 @@
-// import { NextRequest, NextResponse } from 'next/server'
-// import { prisma } from '@/lib/prisma'
 
 import { prisma } from "@/lib/prisma"
 import { NextRequest, NextResponse } from "next/server"
 
-// // ✅ GET SINGLE DEVICE - SIMPLE & CLEAR
-// export async function GET(
-//     request: NextRequest,
-//     { params }: { params: { id: string } }
-// ) {
-//     try {
-//         console.log('📡 Getting device:', params.id)
+// ✅ GET SINGLE DEVICE - SIMPLE & CLEAR
+export async function GET(
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params
+        console.log('📡 Getting device:', id)
 
-//         const device = await prisma.device.findUnique({
-//             where: { id: params.id },
-//             include: {
-//                 bus: {
-//                     select: {
-//                         id: true,
-//                         busNumber: true,
-//                         busType: true,
-//                         isActive: true
-//                     }
-//                 }
-//             }
-//         })
+        const device = await prisma.device.findUnique({
+            where: { id: id },
+            include: {
+                bus: {
+                    select: {
+                        id: true,
+                        busNumber: true,
+                        busType: true,
+                        isActive: true
+                    }
+                }
+            }
+        })
 
-//         if (!device) {
-//             return NextResponse.json(
-//                 { error: 'Device not found' },
-//                 { status: 404 }
-//             )
-//         }
+        if (!device) {
+            return NextResponse.json(
+                { error: 'Device not found' },
+                { status: 404 }
+            )
+        }
 
-//         console.log('✅ Device found:', device.deviceId)
+        console.log('✅ Device found:', device.deviceId)
 
-//         return NextResponse.json(device)
+        return NextResponse.json(device)
 
-//     } catch (error) {
-//         console.error('❌ Get device error:', error)
-//         return NextResponse.json(
-//             { error: 'Failed to get device' },
-//             { status: 500 }
-//         )
-//     }
-// }
+    } catch (error) {
+        console.error('❌ Get device error:', error)
+        return NextResponse.json(
+            { error: 'Failed to get device' },
+            { status: 500 }
+        )
+    }
+}
 
-// // ✅ UPDATE DEVICE - SIMPLE & CLEAR
-// export async function PUT(
-//     request: NextRequest,
-//     { params }: { params: { id: string } }
-// ) {
-//     try {
-//         console.log('📡 Updating device:', params.id)
+// ✅ UPDATE DEVICE - SIMPLE & CLEAR
+export async function PUT(
+    request: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await params
+        console.log('📡 Updating device:', id)
 
-//         const body = await request.json()
-//         const { deviceId, name, isActive } = body
+        const body = await request.json()
+        const { deviceId, name, isActive } = body
 
-//         // Check if device exists
-//         const existingDevice = await prisma.device.findUnique({
-//             where: { id: params.id }
-//         })
+        // Check if device exists
+        const existingDevice = await prisma.device.findUnique({
+            where: { id: id }
+        })
 
-//         if (!existingDevice) {
-//             return NextResponse.json(
-//                 { error: 'Device not found' },
-//                 { status: 404 }
-//             )
-//         }
+        if (!existingDevice) {
+            return NextResponse.json(
+                { error: 'Device not found' },
+                { status: 404 }
+            )
+        }
 
-//         // Check for duplicate device ID (if changing)
-//         if (deviceId && deviceId !== existingDevice.deviceId) {
-//             const duplicateDevice = await prisma.device.findFirst({
-//                 where: { 
-//                     deviceId: deviceId,
-//                     id: { not: params.id }
-//                 }
-//             })
+        // Check for duplicate device ID (if changing)
+        if (deviceId && deviceId !== existingDevice.deviceId) {
+            const duplicateDevice = await prisma.device.findFirst({
+                where: {
+                    deviceId: deviceId,
+                    id: { not: id }
+                }
+            })
 
-//             if (duplicateDevice) {
-//                 return NextResponse.json(
-//                     { error: 'Device ID already exists' },
-//                     { status: 409 }
-//                 )
-//             }
-//         }
+            if (duplicateDevice) {
+                return NextResponse.json(
+                    { error: 'Device ID already exists' },
+                    { status: 409 }
+                )
+            }
+        }
 
-//         // Update device
-//         const updatedDevice = await prisma.device.update({
-//             where: { id: params.id },
-//             data: {
-//                 ...(deviceId && { deviceId }),
-//                 ...(name && { name }),
-//                 ...(isActive !== undefined && { isActive }),
-//                 updatedAt: new Date()
-//             },
-//             include: {
-//                 bus: {
-//                     select: {
-//                         id: true,
-//                         busNumber: true,
-//                         busType: true,
-//                         isActive: true
-//                     }
-//                 }
-//             }
-//         })
+        // Update device
+        const updatedDevice = await prisma.device.update({
+            where: { id: id },
+            data: {
+                ...(deviceId && { deviceId }),
+                ...(name && { name }),
+                ...(isActive !== undefined && { isActive }),
+                updatedAt: new Date()
+            },
+            include: {
+                bus: {
+                    select: {
+                        id: true,
+                        busNumber: true,
+                        busType: true,
+                        isActive: true
+                    }
+                }
+            }
+        })
 
-//         console.log('✅ Device updated:', updatedDevice.deviceId)
+        console.log('✅ Device updated:', updatedDevice.deviceId)
 
-//         return NextResponse.json(updatedDevice)
+        return NextResponse.json(updatedDevice)
 
-//     } catch (error) {
-//         console.error('❌ Update device error:', error)
-//         return NextResponse.json(
-//             { error: 'Failed to update device' },
-//             { status: 500 }
-//         )
-//     }
-// }
-
-// // ✅ DELETE DEVICE - SIMPLE & CLEAR
-// export async function DELETE(
-//     request: NextRequest,
-//     { params }: { params: { id: string } }
-// ) {
-//     try {
-//         console.log('📡 Deleting device:', params.id)
-
-//         // Check if device exists
-//         const existingDevice = await prisma.device.findUnique({
-//             where: { id: params.id }
-//         })
-
-//         if (!existingDevice) {
-//             return NextResponse.json(
-//                 { error: 'Device not found' },
-//                 { status: 404 }
-//             )
-//         }
-
-//         // Delete device
-//         await prisma.device.delete({
-//             where: { id: params.id }
-//         })
-
-//         console.log('✅ Device deleted:', existingDevice.deviceId)
-
-//         return NextResponse.json({
-//             message: 'Device deleted successfully',
-//             deviceId: existingDevice.deviceId
-//         })
-
-//     } catch (error) {
-//         console.error('❌ Delete device error:', error)
-//         return NextResponse.json(
-//             { error: 'Failed to delete device' },
-//             { status: 500 }
-//         )
-//     }
-// }
-
-
-
-
-
+    } catch (error) {
+        console.error('❌ Update device error:', error)
+        return NextResponse.json(
+            { error: 'Failed to update device' },
+            { status: 500 }
+        )
+    }
+}
 
 // ✅ DELETE DEVICE - FIX: Delete positions first
 export async function DELETE(
@@ -210,9 +164,9 @@ export async function DELETE(
     } catch (error: any) {
         console.error('❌ Delete device error:', error)
         return NextResponse.json(
-            { 
+            {
                 error: 'Failed to delete device',
-                details: error.message 
+                details: error.message
             },
             { status: 500 }
         )
