@@ -15,8 +15,12 @@ export async function GET(req: Request) {
 
     // 2. Get Date Filter
     const { searchParams } = new URL(req.url)
-    const dateParam = searchParams.get('date')
-    const date = dateParam ? new Date(dateParam) : new Date()
+    const fromParam = searchParams.get('from')
+    const toParam = searchParams.get('to')
+
+    // Default to today if no range provided
+    const start = fromParam ? new Date(fromParam) : startOfDay(new Date())
+    const end = toParam ? new Date(toParam) : endOfDay(new Date())
 
     // 3. Find the Operator ID linked to this user
     // (Adjust this query if your schema links User -> Operator differently)
@@ -32,8 +36,8 @@ export async function GET(req: Request) {
     const bookings = await prisma.booking.findMany({
       where: {
         journeyDate: {
-          gte: startOfDay(date),
-          lte: endOfDay(date)
+          gte: start,
+          lte: end
         },
         bus: { operatorId: operator.id }
       },

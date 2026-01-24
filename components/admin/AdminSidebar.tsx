@@ -4,17 +4,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { cn } from '@/lib/utils'
-import { 
-  LayoutDashboard, 
-  Users, 
-  BarChart3, 
-  LogOut, 
+import {
+  LayoutDashboard,
+  Users,
+  BarChart3,
+  LogOut,
+  FileText
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Users', href: '/admin/users', icon: Users },
   { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+  { name: 'Reportings', href: '/admin/reportings', icon: FileText },
 ]
 
 export function AdminSidebar() {
@@ -22,7 +24,7 @@ export function AdminSidebar() {
 
   return (
     <aside className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col border-r border-slate-200 bg-white">
-      
+
       {/* 1. Header / Logo */}
       <div className="flex h-16 shrink-0 items-center px-6 border-b border-slate-100">
         <Link href="/admin" className="flex items-center gap-2.5">
@@ -35,7 +37,7 @@ export function AdminSidebar() {
         <nav className="flex flex-1 flex-col gap-y-1">
           {navigation.map((item) => {
             const isActive = pathname === item.href
-            
+
             return (
               <Link
                 key={item.name}

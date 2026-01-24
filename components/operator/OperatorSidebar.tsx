@@ -10,7 +10,7 @@ import {
     Bus,
     Route,
     Calendar,
-    BarChart3,
+
     Navigation,
     AlertTriangle,
     Map,
@@ -73,14 +73,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
 
     ]
 
-    const secondaryItems = [
-        {
-            title: 'Analytics',
-            href: '/operator/analytics',
-            icon: BarChart3,
-            badge: null,
-        },
-    ]
+
 
     const isActive = (href: string) => {
         if (href === '/operator') {
@@ -131,22 +124,7 @@ export function OperatorSidebar({ className }: OperatorSidebarProps) {
                     ))}
                 </nav>
 
-                {/* Secondary Navigation */}
-                <nav className="space-y-1 px-2 mt-6">
-                    {!collapsed && (
-                        <p className="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                            Insights
-                        </p>
-                    )}
-                    {secondaryItems.map((item) => (
-                        <SidebarItem
-                            key={item.href}
-                            item={item}
-                            isActive={isActive(item.href)}
-                            collapsed={collapsed}
-                        />
-                    ))}
-                </nav>
+
             </div>
 
             {/* Collapse Footer */}

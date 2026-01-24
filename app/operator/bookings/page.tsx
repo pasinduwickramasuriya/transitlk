@@ -8,7 +8,7 @@ import { startOfDay, endOfDay } from 'date-fns'
 export default async function OperatorBookingsPage({
     searchParams,
 }: {
-    searchParams: { date?: string }
+    searchParams: { from?: string; to?: string }
 }) {
     const session = await getServerSession(authOptions)
 
@@ -37,10 +37,20 @@ export default async function OperatorBookingsPage({
         )
     }
 
-    // 3. Handle Date Logic (Default to Today)
-    const selectedDate = searchParams.date ? new Date(searchParams.date) : new Date()
-    const start = startOfDay(selectedDate)
-    const end = endOfDay(selectedDate)
+    // 3. Handle Date Logic
+    // Default to today if no date range in URL
+    const fromParam = searchParams.from
+    const toParam = searchParams.to
+
+    const today = new Date()
+    // If no params, default to Today. If params exist, use them.
+    const start = fromParam ? new Date(fromParam) : startOfDay(today)
+    const end = toParam ? new Date(toParam) : endOfDay(today)
+
+    const dateRange = {
+        from: start,
+        to: end
+    }
 
     // 4. Fetch Initial Bookings (Server Side)
     const bookings = await prisma.booking.findMany({
@@ -83,7 +93,7 @@ export default async function OperatorBookingsPage({
             <BookingsClient
                 bookings={JSON.parse(JSON.stringify(bookings))}
                 initialStats={stats}
-                initialDate={selectedDate}
+                initialDateRange={dateRange}
             />
         </div>
     )
