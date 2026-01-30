@@ -3,18 +3,18 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
-  console.log('📍 API /operator/tracking/positions called')
+  console.log(' API /operator/tracking/positions called')
   
   try {
     const { searchParams } = new URL(request.url)
     const since = searchParams.get('since')
     
-    // ✅ FIX: Get positions from last 24 hours instead of 30 minutes
+    // FIX: Get positions from last 24 hours instead of 30 minutes
     const timeFilter = since ? 
       new Date(since) : 
       new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
 
-    console.log(`📍 Fetching positions since: ${timeFilter.toISOString()}`)
+    console.log(` Fetching positions since: ${timeFilter.toISOString()}`)
 
     const positions = await prisma.position.findMany({
       where: {
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       take: 1000
     })
 
-    console.log(`📍 Found ${positions.length} total positions`)
+    console.log(` Found ${positions.length} total positions`)
 
     // Group by deviceId to get latest position per device
     const latestPositionsMap = new Map()
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
 
     const latestPositions = Array.from(latestPositionsMap.values())
 
-    console.log(`✅ Returning ${latestPositions.length} unique device positions`)
+    console.log(` Returning ${latestPositions.length} unique device positions`)
     
     // Log each position for debugging
     latestPositions.forEach(pos => {
@@ -73,7 +73,7 @@ export async function GET(request: NextRequest) {
     
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.error('❌ Error fetching positions:', error)
+    console.error(' Error fetching positions:', error)
     return NextResponse.json(
       { 
         error: 'Failed to fetch positions',

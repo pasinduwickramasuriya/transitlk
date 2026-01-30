@@ -52,7 +52,7 @@ async function getPageData() {
 
     return { operator, notifications, users }
   } catch (error) {
-    console.error('❌ Error fetching notification data:', error)
+    console.error(' Error fetching notification data:', error)
     return {
       operator: { id: DEFAULT_OPERATOR_ID, name: 'TransitLK Operator' },
       notifications: [],

@@ -17,8 +17,8 @@ export async function sendSMS(phoneNumber: string, message: string) {
       to: phone,
     })
     
-    console.log(`✅ SMS sent to ${phone}`)
+    console.log(` SMS sent to ${phone}`)
   } catch (error) {
-    console.error('❌ SMS failed:', error)
+    console.error('SMS failed:', error)
   }
 }

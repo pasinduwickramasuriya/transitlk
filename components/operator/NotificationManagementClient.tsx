@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { useState, useEffect, useMemo } from 'react'
@@ -138,54 +139,26 @@ export function NotificationManagementClient({
     setEditingNotification(null)
   }
 
-  // CREATE - Send new notification
-  // const handleCreate = async (e: React.FormEvent) => {
-  //   e.preventDefault()
-  //   setLoading(true)
-
-  //   try {
-  //     const response = await fetch('/api/operator/notifications', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(formData)
-  //     })
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to send notification')
-  //     }
-
-  //     const result = await response.json()
-
-  //     setNotifications([result.notification, ...notifications])
-  //     toast.success('Notification sent successfully')
-  //     setIsFormOpen(false)
-  //     resetForm()
-  //   } catch (error) {
-  //     toast.error('Failed to send notification')
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      // ✅ FORCE broadcast to ALL users - ignore formData values
+      //      FORCE broadcast to ALL users - ignore formData values
       const broadcastData = {
         title: formData.title,
         message: formData.message,
         type: formData.type,
-        isBroadcast: true,  // ✅ ALWAYS TRUE
-        userId: null        // ✅ ALWAYS NULL
+        isBroadcast: true,  //      ALWAYS TRUE
+        userId: null        //      ALWAYS NULL
       }
 
-      console.log('📤 Sending notification:', broadcastData) // Debug log
+      console.log(' Sending notification:', broadcastData) // Debug log
 
       const response = await fetch('/api/operator/notifications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(broadcastData) // ✅ Use broadcastData instead of formData
+        body: JSON.stringify(broadcastData) //      Use broadcastData instead of formData
       })
 
       if (!response.ok) {
@@ -204,7 +177,7 @@ export function NotificationManagementClient({
       setIsFormOpen(false)
       resetForm()
     } catch (error: any) {
-      console.error('❌ Error:', error)
+      console.error(' Error:', error)
       toast.error(error.message || 'Failed to send notification')
     } finally {
       setLoading(false)
@@ -420,138 +393,7 @@ export function NotificationManagementClient({
                       {editingNotification ? 'Edit' : 'Send'} Notification
                     </Button>
                   </DialogTrigger>
-                  {/* <DialogContent className="max-w-lg">
-                    <DialogHeader className='text-slate-900'>
-                      <DialogTitle>
-                        {editingNotification ? 'Edit Notification' : 'Send New Notification'}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={editingNotification ? handleUpdate : handleCreate} className="space-y-4">
-                      <div>
-                        <Label className="text-slate-900 font-semibold">Title</Label>
-                        <Input
-                          value={formData.title}
-                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                          placeholder="Notification title"
-                          className="text-slate-900 placeholder:text-slate-400"
-                          required
-                        />
-                      </div>
 
-                      <div>
-                        <Label className="text-slate-900 font-semibold">Message</Label>
-                        <Textarea
-                          value={formData.message}
-                          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          placeholder="Notification message"
-                          className="text-slate-900 placeholder:text-slate-400"
-                          rows={4}
-                          required
-                        />
-                      </div>
-
-                      <div>
-                        <Label className="text-slate-900 font-semibold">Type</Label>
-                        <Select
-                          value={formData.type}
-                          onValueChange={(value: any) => setFormData({ ...formData, type: value })}
-                        >
-                          <SelectTrigger className="text-slate-900">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white">
-                            {notificationTypes.map(type => (
-                              <SelectItem
-                                key={type.value}
-                                value={type.value}
-                                className="text-slate-900 cursor-pointer hover:bg-slate-100"
-                              >
-                                <div className="flex items-center gap-2">
-                                  <type.icon className="h-4 w-4 text-slate-700" />
-                                  <span className="text-slate-900">{type.label}</span>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="flex items-center space-x-2 p-3 bg-slate-50 rounded-lg border border-slate-200">
-                        <input
-                          type="checkbox"
-                          id="isBroadcast"
-                          checked={formData.isBroadcast}
-                          onChange={(e) => setFormData({
-                            ...formData,
-                            isBroadcast: e.target.checked,
-                            userId: e.target.checked ? null : formData.userId
-                          })}
-                          className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
-                        />
-                        <Label
-                          htmlFor="isBroadcast"
-                          className="text-slate-900 font-medium cursor-pointer"
-                        >
-                          Send to all users (Broadcast)
-                        </Label>
-                      </div>
-
-
-                      {!formData.isBroadcast && (
-                        <div>
-                          <Label className="text-slate-900 font-semibold">Select User</Label>
-                          <Select
-                            value={formData.userId || ''}
-                            onValueChange={(value) => setFormData({ ...formData, userId: value })}
-                            required={!formData.isBroadcast}
-                          >
-                            <SelectTrigger className="text-slate-900">
-                              <SelectValue
-                                placeholder="Select a user"
-                                className="text-slate-400"
-                              />
-                            </SelectTrigger>
-                            <SelectContent className="bg-white">
-                              {users.map(user => (
-                                <SelectItem
-                                  key={user.id}
-                                  value={user.id}
-                                  className="text-slate-900 cursor-pointer hover:bg-slate-100"
-                                >
-                                  {user.name || user.email}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      )}
-
-
-                      <div className="flex gap-2 pt-4">
-                        <Button
-                          type="submit"
-                          disabled={loading}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                        >
-                          {editingNotification ? (
-                            <Save className="h-4 w-4 mr-2" />
-                          ) : (
-                            <Send className="h-4 w-4 mr-2" />
-                          )}
-                          {loading ? 'Processing...' : editingNotification ? 'Update' : 'Send'} Notification
-                        </Button>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => setIsFormOpen(false)}
-                          className="text-slate-900 border-slate-300 hover:bg-slate-100"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </form>
-
-                  </DialogContent> */}
                   <DialogContent className="max-w-lg">
                     <DialogHeader className='text-slate-900'>
                       <DialogTitle>
@@ -608,7 +450,7 @@ export function NotificationManagementClient({
                         </Select>
                       </div>
 
-                      {/* ✅ NEW: Always shows broadcast message */}
+                      {/*      NEW: Always shows broadcast message */}
                       <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                         <div className="flex items-center gap-2 text-blue-700">
                           <Globe className="h-4 w-4" />

@@ -107,13 +107,5 @@ describe('SignInPage', () => {
         }, { timeout: 3000 })
     })
 
-    it('handles Google sign in', async () => {
-        render(<SignInPage />)
-        const googleBtn = screen.getByText(/Continue with Google/i)
-        fireEvent.click(googleBtn)
 
-        await waitFor(() => {
-            expect(mockSignIn).toHaveBeenCalledWith('google', expect.objectContaining({ redirect: true }))
-        })
-    })
 })

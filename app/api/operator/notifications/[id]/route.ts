@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
@@ -50,7 +51,7 @@ export async function GET(
       success: true
     })
   } catch (error: any) {
-    console.error('❌ Error fetching notification:', error)
+    console.error('Error fetching notification:', error)
     return NextResponse.json(
       { 
         error: 'Failed to fetch notification',

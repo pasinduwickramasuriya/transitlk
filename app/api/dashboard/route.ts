@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     // Calculate stats
     const now = new Date()
     const completedTrips = allBookings.filter(b => b.status === 'COMPLETED').length
-    const upcomingTrips = allBookings.filter(b => 
+    const upcomingTrips = allBookings.filter(b =>
       b.status === 'CONFIRMED' && new Date(b.journeyDate) >= now
     ).length
     const totalSpent = allBookings
@@ -59,6 +59,7 @@ export async function GET(request: NextRequest) {
     // Get upcoming trips
     const upcomingBookings = allBookings
       .filter(b => b.status === 'CONFIRMED' && new Date(b.journeyDate) >= now)
+      .sort((a, b) => new Date(a.journeyDate).getTime() - new Date(b.journeyDate).getTime())
       .slice(0, 5)
       .map(booking => ({
         id: booking.id,
