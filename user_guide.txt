@@ -1,0 +1,126 @@
+TRANSITLK SYSTEM USER GUIDE
+===========================
+
+Welcome to the TransitLK User Guide. This document provides a comprehensive overview of the system's features and functionality for all user roles: Passengers, Operators, and Administrators.
+
+TABLE OF CONTENTS
+-----------------
+1. General System Overview
+2. For Passengers (Public Users)
+3. For Bus Operators
+4. For Administrators
+5. Contact & Support
+
+---
+
+1. GENERAL SYSTEM OVERVIEW
+--------------------------
+TransitLK is a comprehensive bus booking and fleet management platform designed to streamline public transport in Sri Lanka. It connects passengers with bus operators, offering real-time seat booking, secure payments, and live bus tracking.
+
+System Roles:
+- Passenger: Searches and books bus tickets.
+- Operator: Manages bus fleet, routes, schedules, and fares.
+- Administrator: Oversees the entire platform, users, and generates reports.
+
+---
+
+2. FOR PASSENGERS (PUBLIC USERS)
+--------------------------------
+As a passenger, you can use TransitLK to plan your journey and secure your seat in advance.
+
+2.1. Getting Started
+   - Visit the home page to access the main search interface.
+   - You can search for buses without an account, but booking requires signing in.
+   - Click "Sign In" or "Register" to create an account for booking history and profile management.
+
+2.2. Booking a Ticket
+   Step 1: Search
+   - Enter your "From" (Start Location) and "To" (End Location).
+   - Select your "Journey Date".
+   - Click "Search Buses".
+
+   Step 2: Select Bus
+   - Review available buses, departure times, and ticket prices.
+   - Click "Select" on your preferred bus.
+
+   Step 3: Choose Seats
+   - A seat layout will appear.
+   - Click on available seats (white/grey) to select them. Selected seats will change color.
+   - Review the total price.
+
+   Step 4: Payment
+   - Proceed to checkout.
+   - Enter payment details (Credit/Debit Card, etc.).
+   - Confirm payment.
+
+   Step 5: Confirmation
+   - Upon successful payment, you will receive a digital ticket with a QR code.
+   - You can view this ticket in your "My Bookings" section.
+
+2.3. Dashboard Features
+   - My Bookings: View upcoming and past trips.
+   - Profile: Update your personal details.
+   - Tracking: Track your assigned bus in real-time (if available for the route).
+
+---
+
+3. FOR BUS OPERATORS
+--------------------
+Operators have access to a dedicated dashboard to manage their fleet and revenue.
+
+3.1. Dashboard Overview
+   - Login to the Operator Portal.
+   - The main dashboard displays key metrics: Total Revenue, Active Buses, Today's Bookings.
+
+3.2. Fleet Management (Buses)
+   - Navigate to the "Buses" section.
+   - Add New Bus: Enter Bus Number, Capacity, Model, and Amenities.
+   - Edit/Delete: Manage existing bus details.
+   - Device Assignment: Link GPS tracking devices to buses for real-time tracking.
+
+3.3. Route & Schedule Management
+   - Routes: Define routes with Start/End locations and intermediate stops.
+   - Schedules: Assign buses to specific routes and set Departure/Arrival times.
+   - Fares: Set ticket prices for different routes and bus types in the "Fare" section.
+
+3.4. Bookings Management
+   - View a list of all bookings for your buses.
+   - Filter by date, route, or status (Confirmed, Pending).
+   - Verify passenger tickets using QR code scanning (if applicable).
+
+3.5. Live Tracking
+   - Use the "Tracking" feature to see the real-time location of all your active buses on a map.
+
+---
+
+4. FOR ADMINISTRATORS
+---------------------
+Administrators have full control over the system configuration and data.
+
+4.1. Admin Dashboard
+   - Provides a high-level view of system health.
+   - Key User Statistics, Total Bookings, and Platform Revenue.
+
+4.2. User Management
+   - Navigate to "Users" to manage passenger and operator accounts.
+   - View user details, booking history, and account status.
+   - Deactivate or ban users violating terms.
+
+4.3. Analytics & Reporting
+   - Analytics: Visual charts showing booking trends, revenue growth, and popular routes.
+   - Reports: Generate detailed reports for specific periods (Daily, Monthly) for auditing and analysis.
+
+4.4. System Settings
+   - Manage global configurations.
+
+---
+
+5. CONTACT & SUPPORT
+--------------------
+If you encounter technical issues or need assistance:
+- Email: support@transitlk.com
+- Phone: Hotline available on the website footer.
+- Help Center: Visit the FAQ section on the website.
+
+===========================
+End of User Guide
